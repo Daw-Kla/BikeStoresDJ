@@ -1,8 +1,6 @@
 # [SB Admin Django](https://appseed.us/product/sb-admin/django/)
 
 
-
-
 z domu domudmodmu
 
 
