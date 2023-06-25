@@ -1,0 +1,22 @@
+{
+    "backend": "django",
+    "db_name": "",
+    "db_pass": "",
+    "db_type": "",
+    "db_user": "",
+    "dbms": "0",
+    "description": "generated product",
+    "design": "sb-admin",
+    "docker": "0",
+    "err_code": 0,
+    "frontend": "",
+    "heroku": "0",
+    "pattern": "mvc",
+    "pro": "0",
+    "task_id": "c259e2ca-c6fd-493d-b4d7-6da9365ef441",
+    "task_info": "Task is running",
+    "task_result": "SUCCESS",
+    "task_state": "RUNNING",
+    "task_ts_end": "2023-06-23-10-21-44",
+    "task_ts_start": "2023-06-23-10-21-44"
+}
