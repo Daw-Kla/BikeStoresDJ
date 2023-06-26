@@ -94,9 +94,14 @@ if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
+        'ENGINE': 'mssql',
+        'NAME': 'BikeStores',
+        'HOST': 'DESKTOP-OIJFEGF\SQLEXPRESS',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
+        },
+    },
     }
 
 # Password validation
