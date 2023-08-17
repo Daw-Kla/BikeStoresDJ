@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.home'  # Enable the inner home (home)
+    'apps.production',  # Enable the inner home (home)
+    'apps.sales'
+    
+
 ]
 
 MIDDLEWARE = [
@@ -80,7 +83,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
+'''if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
     DATABASES = { 
       'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
@@ -93,6 +96,18 @@ if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
     }
 else:
     DATABASES = {
+        'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'BikeStores',
+        'HOST': 'DESKTOP-OIJFEGF\SQLEXPRESS',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
+        },
+    },
+    }'''
+
+DATABASES = {
         'default': {
         'ENGINE': 'mssql',
         'NAME': 'BikeStores',

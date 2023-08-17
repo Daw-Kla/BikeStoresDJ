@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from django.contrib import admin
-from .models import Brands, Categories, Products, Stocks
+from .models import Brands, Categories, Products
 
 # Register your models here.
 
@@ -20,6 +20,6 @@ class ProductsAdmin(admin.ModelAdmin):
     list_display = ('product_id', 'product_name')
 admin.site.register(Products, ProductsAdmin)
 
-class StocksAdmin(admin.ModelAdmin):
-    list_display = ('store')
-admin.site.register(Stocks, StocksAdmin)
+'''class StocksAdmin(admin.ModelAdmin):
+    list_display = ('store_id', 'product_id')
+admin.site.register(Stocks, StocksAdmin)'''
