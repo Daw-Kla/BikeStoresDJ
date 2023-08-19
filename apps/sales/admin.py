@@ -8,7 +8,7 @@ class CustomersAdmin(admin.ModelAdmin):
 admin.site.register(Customers, CustomersAdmin)
 
 class OrderItemsAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product')
+    list_display = ('id', 'list_price')
 admin.site.register(OrderItems, OrderItemsAdmin)
 
 class OrdersAdmin(admin.ModelAdmin):

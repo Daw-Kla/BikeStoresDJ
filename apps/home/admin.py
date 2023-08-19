@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from django.contrib import admin
-from .models import Brands, Categories, Products, Stocks
+from .models import Brands, Categories, Products, Customers, OrderItems, Orders, Staffs, Stores, Stocks
 
 # Register your models here.
 
@@ -21,5 +21,25 @@ class ProductsAdmin(admin.ModelAdmin):
 admin.site.register(Products, ProductsAdmin)
 
 class StocksAdmin(admin.ModelAdmin):
-    list_display = ('store')
+    list_display = ('quantity',)
 admin.site.register(Stocks, StocksAdmin)
+
+class CustomersAdmin(admin.ModelAdmin):
+    list_display = ('customer_id', 'first_name', 'last_name', 'city')
+admin.site.register(Customers, CustomersAdmin)
+
+class OrderItemsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'list_price')
+admin.site.register(OrderItems, OrderItemsAdmin)
+
+class OrdersAdmin(admin.ModelAdmin):
+    list_display = ('order_id', 'customer', 'order_date')
+admin.site.register(Orders, OrdersAdmin)
+
+class StaffsAdmin(admin.ModelAdmin):
+    list_display = ('staff_id', 'first_name', 'last_name', 'email')
+admin.site.register(Staffs, StaffsAdmin)
+
+class StoresAdmin(admin.ModelAdmin):
+    list_display = ('store_id', 'store_name', 'phone', 'city')
+admin.site.register(Stores, StoresAdmin)

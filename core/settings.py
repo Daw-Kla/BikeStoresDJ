@@ -40,9 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.production',  # Enable the inner home (home)
-    'apps.sales'
-    
-
+    'apps.sales',
+    #'apps.home'
 ]
 
 MIDDLEWARE = [

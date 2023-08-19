@@ -17,14 +17,14 @@ class Customers(models.Model):
         managed = False
         db_table = 'customers'
 
-
 class OrderItems(models.Model):
-    order = models.OneToOneField('Orders', models.DO_NOTHING, primary_key=True)
+    order = models.OneToOneField('Orders', models.DO_NOTHING)
     item_id = models.IntegerField()
     product = models.ForeignKey('production.Products', models.DO_NOTHING)
     quantity = models.IntegerField()
     list_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=4, decimal_places=2)
+    id = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = False
