@@ -21,5 +21,5 @@ class ProductsAdmin(admin.ModelAdmin):
 admin.site.register(Products, ProductsAdmin)
 
 class StocksAdmin(admin.ModelAdmin):
-    list_display = ()
+    list_display = ('id', 'store')
 admin.site.register(Stocks, StocksAdmin)

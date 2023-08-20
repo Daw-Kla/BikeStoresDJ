@@ -17,6 +17,26 @@ class Customers(models.Model):
         managed = False
         db_table = 'customers'
 
+    def __str__(self):
+        return f"(ID: {self.customer_id}) {self.first_name} {self.last_name} "
+
+class Stores(models.Model):
+    store_id = models.AutoField(primary_key=True)
+    store_name = models.CharField(max_length=255, db_collation='Polish_CI_AS')
+    phone = models.CharField(max_length=25, db_collation='Polish_CI_AS', blank=True, null=True)
+    email = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
+    street = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
+    city = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
+    state = models.CharField(max_length=10, db_collation='Polish_CI_AS', blank=True, null=True)
+    zip_code = models.CharField(max_length=5, db_collation='Polish_CI_AS', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'stores'
+
+    def __str__(self):
+        return self.store_name
+    
 class OrderItems(models.Model):
     order = models.OneToOneField('Orders', models.DO_NOTHING)
     item_id = models.IntegerField()
@@ -24,7 +44,7 @@ class OrderItems(models.Model):
     quantity = models.IntegerField()
     list_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=4, decimal_places=2)
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
 
     class Meta:
         managed = False
@@ -46,7 +66,9 @@ class Orders(models.Model):
         managed = False
         db_table = 'orders'
 
-
+    def __str__(self):
+        return f"ID: {self.order_id}"
+    
 class Staffs(models.Model):
     staff_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, db_collation='Polish_CI_AS')
@@ -61,17 +83,9 @@ class Staffs(models.Model):
         managed = False
         db_table = 'staffs'
 
+    #this methon allows us to display exatly what we want in admin panel
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
-class Stores(models.Model):
-    store_id = models.AutoField(primary_key=True)
-    store_name = models.CharField(max_length=255, db_collation='Polish_CI_AS')
-    phone = models.CharField(max_length=25, db_collation='Polish_CI_AS', blank=True, null=True)
-    email = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
-    street = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
-    city = models.CharField(max_length=255, db_collation='Polish_CI_AS', blank=True, null=True)
-    state = models.CharField(max_length=10, db_collation='Polish_CI_AS', blank=True, null=True)
-    zip_code = models.CharField(max_length=5, db_collation='Polish_CI_AS', blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'stores'
+

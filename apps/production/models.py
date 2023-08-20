@@ -16,7 +16,9 @@ class Brands(models.Model):
         managed = False
         db_table = 'brands'
 
-
+    def __str__(self):
+        return f"{self.brand_name}"
+    
 class Categories(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=255, db_collation='Polish_CI_AS')
@@ -24,6 +26,9 @@ class Categories(models.Model):
     class Meta:
         managed = False
         db_table = 'categories'
+
+    def __str__(self):
+        return f"{self.category_name}"
 
 class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
@@ -37,11 +42,13 @@ class Products(models.Model):
         managed = False
         db_table = 'products'
 
+    def __str__(self):
+        return f"{self.product_name}"
 
 class Stocks(models.Model):
     id = models.AutoField(primary_key=True)
-    store = models.ForeignKey('sales.Stores', models.DO_NOTHING)
-    product = models.ForeignKey('Products', models.DO_NOTHING)
+    store = models.ForeignKey('sales.stores', models.DO_NOTHING)
+    product = models.ForeignKey('products', models.DO_NOTHING)
     quantity = models.IntegerField(blank=True, null=True)
 
     

@@ -1,0 +1,53 @@
+
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Order items</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Order items</li>
+            </ol>
+            <div class="card mb-4">
+               
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Order items table
+                </div>
+                <div class="card-body">
+
+                    <table id="orderItemsTable">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Item_id</th>
+                                <th>Product</th>
+                                <th>Qantity</th>
+                                <th>List_price</th>
+                                <th>Discount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes there in base.html file  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
