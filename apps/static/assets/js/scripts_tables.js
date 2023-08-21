@@ -64,4 +64,45 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     }
 
+    const ordersTable = document.body.querySelector('#ordersTable');
+    if (ordersTable) {
+        $(document).ready(function() {
+            $('#ordersTable').DataTable({
+                ajax: {
+                    url: 'jsonresponse/orders',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'order_id' },
+                    { data: 'customer' },
+                    { data: 'order_status' },
+                    { data: 'order_date' },
+                    { data: 'store' },
+                    { data: 'staff' },
+                ]
+            });
+        });
+    }
+
+    const staffsTable = document.body.querySelector('#staffsTable');
+    if (staffsTable) {
+        $(document).ready(function() {
+            $('#staffsTable').DataTable({
+                ajax: {
+                    url: 'jsonresponse/staffs',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'staff_id' },
+                    { data: 'first_name' },
+                    { data: 'last_name' },
+                    { data: 'phone' },
+                    { data: 'active' },
+                    { data: 'store' },
+                    { data: 'manager' },
+                ]
+            });
+        });
+    }
+
 });

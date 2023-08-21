@@ -30,3 +30,19 @@ def order_items_table(request):
 def order_items(request):
     result_list = list(OrderItems.objects.all().values('order', 'item_id', 'product', 'quantity', 'list_price', 'discount'))
     return JsonResponse(result_list, safe=False)
+
+def orders_table(request):
+    context = {}
+    return render(request, 'apps\templates\home\orders_table.html', context)
+
+def orders(request):
+    result_list = list(Orders.objects.all().values('order_id', 'customer', 'order_status', 'order_date', 'store', 'staff'))
+    return JsonResponse(result_list, safe=False)
+
+def staffs_table(request):
+    context = {}
+    return render(request, 'apps\templates\home\staffs_table.html', context)
+
+def staffs(request):
+    result_list = list(Staffs.objects.all().values('staff_id', 'first_name', 'last_name', 'email', 'phone', 'active', 'store', 'manager'))
+    return JsonResponse(result_list, safe=False)

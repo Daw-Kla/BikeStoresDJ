@@ -18,4 +18,8 @@ urlpatterns = [
     path('jsonresponse/stores', views.stores, name='stores'),
     path('order_items_table/', views.order_items_table,  name='order_items_table'),
     path('jsonresponse/order_items', views.order_items, name='order_items'),
+    path('orders_table/', views.orders_table,  name='orders_table'),
+    path('jsonresponse/orders', views.orders, name='orders'),
+    path('staffs_table/', views.staffs_table,  name='staffs_table'),
+    path('jsonresponse/staffs', views.staffs, name='staffs'),
 ]
