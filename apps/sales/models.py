@@ -83,7 +83,7 @@ class Staffs(models.Model):
         managed = False
         db_table = 'staffs'
 
-    #this methon allows us to display exatly what we want in admin panel
+    #this method allows us to display exatly what we want in admin panel
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 

@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', event => {
+    const csrftoken = Cookies.get('csrftoken');
 
     const customersTable = document.body.querySelector('#customersTable');
     if (customersTable) {
@@ -42,7 +43,57 @@ window.addEventListener('DOMContentLoaded', event => {
                 ]
             });
         });
+
+        var exampleModal = document.getElementById("exampleModal");
+
+        // Nasłuchuj zdarzenia show.bs.modal
+        exampleModal.addEventListener("show.bs.modal", function () {
+        // Znajdź przycisk "Add"
+        var addStoreBtn = exampleModal.querySelector("#addStoreBtn");
+        //if (addStoreBtn) {
+        
+            addStoreBtn.addEventListener('click', function () {
+            //var recipient = addButton.getAttribute('data-bs-whatever');
+            var storeId = document.querySelector("input[name='store_id']").value;
+            var storeName = document.querySelector("input[name='store_name']").value;
+            var phone = document.querySelector("input[name='phone']").value;
+            var email = document.querySelector("input[name='email']").value;
+            var street = document.querySelector("input[name='street']").value;
+            var city = document.querySelector("input[name='city']").value;
+            var state = document.querySelector("input[name='state']").value;
+            var zip_code = document.querySelector("input[name='zip_code']").value;
+
+            var data = {
+                'store_id': storeId,
+                'store_name': storeName,
+                'phone': phone,
+                'email': email,
+                'street': street,
+                'city': city,
+                'state': state,
+                'zip_code': zip_code,
+                "csrfmiddlewaretoken" : csrftoken
+            };
+            
+            $.ajax({
+                type: 'POST',
+                url: '/jsonresponse/stores',
+                data: data,
+                
+                
+                success: function (response) {
+                    // Tutaj możesz obsłużyć odpowiedź z serwera
+                    // np. odświeżając tabelę z danymi
+                    console.log(data)
+                },
+                error: function (error) {
+                    // Tutaj możesz obsłużyć błąd w przypadku niepowodzenia
+                    console.log('not ok')
+                }
+            })
+        }); })
     }
+    //}
 
     const orderItemsTable = document.body.querySelector('#orderItemsTable');
     if (orderItemsTable) {
@@ -55,7 +106,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 columns: [
                     { data: 'order' },
                     { data: 'item_id' },
-                    { data: 'product' },
+                    { data: 'product__product_name' },
                     { data: 'quantity' },
                     { data: 'list_price' },
                     { data: 'discount' },
@@ -77,8 +128,17 @@ window.addEventListener('DOMContentLoaded', event => {
                     { data: 'customer' },
                     { data: 'order_status' },
                     { data: 'order_date' },
-                    { data: 'store' },
-                    { data: 'staff' },
+                    { data: 'store__store_name' },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (row.staff__first_name && row.staff__last_name) {
+                                return row.staff__first_name + ' ' + row.staff__last_name;
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
                 ]
             });
         });
@@ -96,10 +156,20 @@ window.addEventListener('DOMContentLoaded', event => {
                     { data: 'staff_id' },
                     { data: 'first_name' },
                     { data: 'last_name' },
+                    { data: 'email' },
                     { data: 'phone' },
                     { data: 'active' },
-                    { data: 'store' },
-                    { data: 'manager' },
+                    { data: 'store__store_name' },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (row.manager__first_name && row.manager__last_name) {
+                                return row.manager__first_name + ' ' + row.manager__last_name;
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
                 ]
             });
         });

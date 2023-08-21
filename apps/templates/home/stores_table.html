@@ -15,10 +15,63 @@
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                 <li class="breadcrumb-item active">Stores</li>
             </ol>
-            <div class="card mb-4">
-               
+            <div style="height: 60px;">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" form="storeForm">Add new store</button>
             </div>
-            <div class="card mb-4">
+
+            <!--pop up window for adding new data-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Adding new store</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" id="storeForm">
+                        <div class="mb-3">
+                            <label class="col-form-label">Store id:</label>
+                            <input type="text" class="form-control" placeholder="Store id" name="store_id">
+                        </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Store name:</label>
+                        <input type="text" class="form-control" placeholder="Store name" name="store_name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Phone:</label>
+                        <input type="text" class="form-control" placeholder="Phone" name="phone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" placeholder="Email" name="email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Street:</label>
+                        <input type="text" class="form-control" placeholder="Street" name="street">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">City:</label>
+                        <input type="text" class="form-control" placeholder="City" name="city">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">State:</label>
+                        <input type="text" class="form-control" placeholder="State" name="state">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Zip code:</label>
+                        <input type="text" class="form-control" placeholder="Zip code" name="zip_code">
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="addStoreBtn">Add</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div>
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
                     Stores data table
@@ -51,5 +104,4 @@
 
 <!-- Specific Page JS goes there in base.html file  -->
 {% block javascripts %}
-
 {% endblock javascripts %}
