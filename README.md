@@ -31,7 +31,7 @@ $ cd c259e2ca-c6fd-493d-b4d7-6da9365ef441
 > Install DB in MS SQL Server
 
 ```bash
-$ # change schema once in MS SQL Server using this code:
+$ # change schema once in MS SQL Server using this code fro each table witch specified schema:
 $ ALTER SCHEMA dbo TRANSFER [production].[TableName] 
 $ ALTER SCHEMA dbo TRANSFER [sales].[TableName]
 ```
