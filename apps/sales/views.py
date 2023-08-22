@@ -38,16 +38,31 @@ def stores_table(request):
     context = {}
     return render(request, 'apps\templates\home\stores_table.html', context)'''
 
+#@ensure_csrf_cookie
 def stores_table(request):
+    print(request.method)
+    print('ok')
+    form = StoreForm()
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
+            print('sxsaxa')
             form.save()
-    else:
-        form = StoreForm()
+            return JsonResponse({'message': 'success'})
+            # Dodaj kod obsługi po zapisaniu danych, np. przekierowanie lub odświeżenie strony
+        else:
+            print(form.errors)
+     #   form = StoreForm()
 
     context = {'form': form}
     return render(request, 'apps\templates\home\stores_table.html', context)
+
+
+'''#testowe nie działające wyświetlanie formsa
+def test(request):
+    form = StoreForm(request.POST)
+    context = {'form' : form}
+    return render(request, 'test.html', context)'''
 
 
 def stores(request):

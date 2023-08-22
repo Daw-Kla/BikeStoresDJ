@@ -21,7 +21,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+#DEBUG = env('DEBUG')
+DEBUG = True
 
 # Assets Management
 ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
@@ -55,11 +56,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SESSION_COOKIE_SAMESITE = 'None'  # Ustawienie dla ciasteczka sesji
+'''SESSION_COOKIE_SAMESITE = 'None'  # Ustawienie dla ciasteczka sesji
 SESSION_COOKIE_SECURE = True      # Ustawienie ciasteczka sesji jako bezpieczne (HTTPS)
 
 CSRF_COOKIE_SAMESITE = 'None'     # Ustawienie dla ciasteczka CSRF
-CSRF_COOKIE_SECURE = True         # Ustawienie ciasteczka CSRF jako bezpieczne (HTTPS)
+CSRF_COOKIE_SECURE = True         # Ustawienie ciasteczka CSRF jako bezpieczne (HTTPS)'''
 
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py

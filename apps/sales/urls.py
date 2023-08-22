@@ -15,6 +15,7 @@ urlpatterns = [
     path('customers_table/', views.customers_table,  name='customers_table'),
     path('jsonresponse/customers', views.customers, name='customers'),
     path('stores_table/', views.stores_table,  name='stores_table'),
+    #path('test/', views.test,  name='test'),
     path('jsonresponse/stores', views.stores, name='stores'),
     path('order_items_table/', views.order_items_table,  name='order_items_table'),
     path('jsonresponse/order_items', views.order_items, name='order_items'),

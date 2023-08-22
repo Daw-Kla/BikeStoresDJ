@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', event => {
-    const csrftoken = Cookies.get('csrftoken');
+    
 
     const customersTable = document.body.querySelector('#customersTable');
     if (customersTable) {
@@ -52,10 +52,28 @@ window.addEventListener('DOMContentLoaded', event => {
         var addStoreBtn = exampleModal.querySelector("#addStoreBtn");
         //if (addStoreBtn) {
         
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        var csrftoken = getCookie('csrftoken');
+        console.log(csrftoken)
+
             addStoreBtn.addEventListener('click', function () {
             //var recipient = addButton.getAttribute('data-bs-whatever');
-            var storeId = document.querySelector("input[name='store_id']").value;
-            var storeName = document.querySelector("input[name='store_name']").value;
+            var store_name = document.querySelector("input[name='store_name']").value;
             var phone = document.querySelector("input[name='phone']").value;
             var email = document.querySelector("input[name='email']").value;
             var street = document.querySelector("input[name='street']").value;
@@ -64,31 +82,48 @@ window.addEventListener('DOMContentLoaded', event => {
             var zip_code = document.querySelector("input[name='zip_code']").value;
 
             var data = {
-                'store_id': storeId,
-                'store_name': storeName,
+                'store_name': store_name,
                 'phone': phone,
                 'email': email,
                 'street': street,
                 'city': city,
                 'state': state,
                 'zip_code': zip_code,
-                //"csrfmiddlewaretoken" : csrftoken           //to moze dac do ajaxa
+                "csrfmiddlewaretoken" : csrftoken           //has to be there
             };
             
+            
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+            }
+            
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                }
+            });
+            
+            var jsonData = JSON.stringify(data);
+
             $.ajax({
                 type: 'POST',
-                url: '/jsonresponse/stores',
-                data: data,
-                
+                url: 'jsonresponse/stores',
+                data: jsonData,
+                dataType: 'json',
                 
                 success: function (response) {
                     // Tutaj możesz obsłużyć odpowiedź z serwera
                     // np. odświeżając tabelę z danymi
+                    console.log(response);
                     console.log(data)
                 },
                 error: function (error) {
                     // Tutaj możesz obsłużyć błąd w przypadku niepowodzenia
                     console.log('not ok')
+                    //console.log(error)
                 }
             })
         }); })
