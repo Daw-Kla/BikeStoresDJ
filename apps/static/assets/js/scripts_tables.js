@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 'city': city,
                 'state': state,
                 'zip_code': zip_code,
-                "csrfmiddlewaretoken" : csrftoken
+                //"csrfmiddlewaretoken" : csrftoken           //to moze dac do ajaxa
             };
             
             $.ajax({

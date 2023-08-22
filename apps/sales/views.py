@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponse, HttpRequest
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from .models import *
+from .forms import StoreForm
 import json
 
 #views take one argument 'request' 
@@ -16,7 +17,7 @@ def customers(request):
         'first_name', 'last_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))
     return JsonResponse(result_list, safe=False)
 
-
+'''
 def stores_table(request):
 
     if request.method == 'POST':
@@ -35,7 +36,19 @@ def stores_table(request):
         print('po save')
 
     context = {}
+    return render(request, 'apps\templates\home\stores_table.html', context)'''
+
+def stores_table(request):
+    if request.method == 'POST':
+        form = StoreForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = StoreForm()
+
+    context = {'form': form}
     return render(request, 'apps\templates\home\stores_table.html', context)
+
 
 def stores(request):
     result_list = list(Stores.objects.all().values('store_id', 'store_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))

@@ -11,7 +11,7 @@ __pycache__/
 *.sqlite3
 *.log
 
-/core/settings.py
+#/core/settings.py
 
 # venv
 env

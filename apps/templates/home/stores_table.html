@@ -28,7 +28,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="post" id="storeForm">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Add new store</button>
+                    </form>
+                    <!--<form action="" method="post" id="storeForm">
                         <div class="mb-3">
                             <label class="col-form-label">Store id:</label>
                             <input type="text" class="form-control" placeholder="Store id" name="store_id">
@@ -61,7 +66,7 @@
                         <label class="col-form-label">Zip code:</label>
                         <input type="text" class="form-control" placeholder="Zip code" name="zip_code">
                     </div>
-                    </form>
+                    </form>-->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
