@@ -5,6 +5,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from .models import *
 from .forms import StoreForm
+from django.contrib import messages
 import json
 
 #views take one argument 'request' 
@@ -39,22 +40,40 @@ def stores_table(request):
     return render(request, 'apps\templates\home\stores_table.html', context)'''
 
 #@ensure_csrf_cookie
+
+
 def stores_table(request):
     print(request.method)
     print('ok')
-    form = StoreForm()
+
     if request.method == 'POST':
-        form = StoreForm(request.POST)
+        context = {}
+        form = StoreForm(request.POST or None)
+        context['StoreForm'] = StoreForm
+
         if form.is_valid():
             print('sxsaxa')
-            form.save()
-            return JsonResponse({'message': 'success'})
-            # Dodaj kod obsługi po zapisaniu danych, np. przekierowanie lub odświeżenie strony
+            obj = Stores()
+
+            obj.store_name = StoreForm.cleaned_data.get("store_name")
+            obj.phone = StoreForm.cleaned_data.get("phone")
+            obj.email = StoreForm.cleaned_data.get("email")
+            obj.street = StoreForm.cleaned_data.get("street")
+            obj.city = StoreForm.cleaned_data.get("city")
+            obj.state = StoreForm.cleaned_data.get("state")
+            obj.zip_code = StoreForm.cleaned_data.get("zip_code")
+            
+
+            try:
+                messages.success(request, "Adding Store done")
+                obj.save()
+                return(request)
+            except:
+                messages.error(request, "Adding Store not done")
+                context['error'] = "Adding aborted"
         else:
             print(form.errors)
-     #   form = StoreForm()
-
-    context = {'form': form}
+     
     return render(request, 'apps\templates\home\stores_table.html', context)
 
 

@@ -28,40 +28,49 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!--<form action="" method="POST" id="xd">
-                        
-                        {{form.store_id}}
-                    </form>-->
-                    <form action="" method="POST" id="storeForm">{% csrf_token %}
+                    <form method="POST" id="storeForm">{% csrf_token %}
                     <div class="mb-3">
-                        <label class="col-form-label">Store name:</label>
-                        <input type="text" class="form-control" placeholder="Store name" name="store_name">
+                        <label for="{{StoreForm.store_name}}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">Phone:</label>
-                        <input type="text" class="form-control" placeholder="Phone" name="phone">
+                        <label for="{{StoreForm.phone}}" class="col-form-label">{{ StoreForm.phone.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">Email:</label>
-                        <input type="text" class="form-control" placeholder="Email" name="email">
+                        <label for="{{StoreForm.email}}" class="col-form-label">{{ StoreForm.email.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">Street:</label>
-                        <input type="text" class="form-control" placeholder="Street" name="street">
+                        <label for="{{StoreForm.street}}" class="col-form-label">{{ StoreForm.street.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">City:</label>
-                        <input type="text" class="form-control" placeholder="City" name="city">
+                        <label for="{{StoreForm.city}}" class="col-form-label">{{ StoreForm.city.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">State:</label>
-                        <input type="text" class="form-control" placeholder="State" name="state">
+                        <label for="{{StoreForm.state}}" class="col-form-label">{{ StoreForm.state.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="col-form-label">Zip code:</label>
-                        <input type="text" class="form-control" placeholder="Zip code" name="zip_code">
+                        <label for="{{StoreForm.zip_code}}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
+                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                            {{ StoreForm.phone }}
+                        </div>
                     </div>
-                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
