@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpRequest
 # Create your views here.
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
@@ -46,6 +46,36 @@ def stores_table(request):
     print(request.method)
     print('ok')
 
+    context = {}  # Inicjalizujemy kontekst
+
+    if request.method == 'POST':
+        form = StoreForm(request.POST)
+
+        if form.is_valid():
+            print('Form is valid')
+            obj = Stores(**form.cleaned_data)  # Tworzymy obiekt modelu na podstawie formularza
+
+            try:
+                obj.save()  # Zapisujemy obiekt do bazy danych
+                messages.success(request, "Store added successfully")
+                return redirect('stores_table')  # Przekierowanie do widoku po dodaniu
+            
+            except Exception as e:
+                print('Error saving:', e)
+                messages.error(request, "Error adding store")
+        else:
+            print('Form is not valid:', form.errors)
+            context['StoreForm'] = form  # Przekazujemy formularz z błędami do kontekstu
+    else:
+        form = StoreForm()
+        context['StoreForm'] = form  # Przekazujemy pusty formularz do kontekstu
+
+    return render(request, 'apps\templates\home\stores_table.html', context)
+
+'''def stores_table(request):
+    print(request.method)
+    print('ok')
+
     if request.method == 'POST':
         context = {}
         form = StoreForm(request.POST or None)
@@ -74,7 +104,7 @@ def stores_table(request):
         else:
             print(form.errors)
      
-    return render(request, 'apps\templates\home\stores_table.html', context)
+    return render(request, 'apps\templates\home\stores_table.html', context)'''
 
 
 '''#testowe nie działające wyświetlanie formsa
