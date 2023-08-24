@@ -25,18 +25,25 @@
                 </div>
                 <div class="card-body">
 
-                    <table id="orderItemsTable">
+                    <table id="orderItemsTable" class="display">
                         <thead>
                             <tr>
-                                <th>Order</th>
-                                <th>Item_id</th>
-                                <th>Product</th>
-                                <th>Qantity</th>
-                                <th>List_price</th>
-                                <th>Discount</th>
+                                <th scope="col">Order</th>
+                                <th scope="col">Item_id</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Qantity</th>
+                                <th scope="col">List_price</th>
+                                <th scope="col">Discount</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in tabela|slice:":50" %}
+                        <tr>
+                            {% for x in item %}
+                                <td>{{ x }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
 

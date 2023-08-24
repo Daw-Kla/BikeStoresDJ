@@ -3,16 +3,18 @@ from django.forms import ModelForm
 from django import forms
 from .models import Stores
 
+
 class StoreForm(forms.Form):
 
     store_name = forms.CharField(
-        label='store_name: *',
+        label='store_name',
         required=True,
         widget=forms.TextInput(
             attrs={
-                'name': 'Store name',
+                'name': 'store_name',
                 'class': 'form-control form-control-sm',
-                'placeholder': 'store_name'
+                'placeholder': 'Store name',
+                'id': 'store_id'
             }
         )
     )
@@ -98,3 +100,8 @@ class StoreForm(forms.Form):
         city = cleaned_data.get("city")
         state = cleaned_data.get("state")
         zip_code = cleaned_data.get("zip_code")
+
+class MyForm(forms.Form):
+    a = forms.CharField(max_length=20)
+    mat = forms.CharField(max_length=200)
+    

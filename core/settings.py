@@ -4,7 +4,9 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 import os, environ
+import mimetypes
 
+mimetypes.add_type("text/javascript", "js", True)
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True)
@@ -21,8 +23,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = env('DEBUG')
-DEBUG = True
+DEBUG = env('DEBUG')
+#DEBUG = True
 
 # Assets Management
 ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
@@ -65,7 +67,8 @@ CSRF_COOKIE_SECURE = True         # Ustawienie ciasteczka CSRF jako bezpieczne (
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
-TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")  # ROOT dir for templates
+TEMPLATE_DIR = os.path.join(CORE_DIR, "core/templates")  # ROOT dir for templates
+#TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/sales")  # ROOT dir for templates
 
 TEMPLATES = [
     {
@@ -142,7 +145,7 @@ STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, 'apps/static'),
+    os.path.join(CORE_DIR, 'core/static'),
 )
 
 

@@ -9,6 +9,7 @@
 {% block content %}
 
     <main>
+        
         <div class="container-fluid px-4">
             <h1 class="mt-4">Stores</h1>
             <ol class="breadcrumb mb-4">
@@ -27,46 +28,47 @@
                     <h5 class="modal-title" id="exampleModalLabel">Adding new store</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                
                 <div class="modal-body">
-                    <form method="POST" id="storeForm">{% csrf_token %}
+                    <form method="post" id="StoreForm">{% csrf_token %}
                     <div class="mb-3">
-                        <label for="{{StoreForm.store_name}}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
+                        <label for="{{ StoreForm.store_name.id_for_label }}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.store_name }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.phone}}" class="col-form-label">{{ StoreForm.phone.label }}</label>
+                        <label for="{{ StoreForm.phone.id_for_label }}" class="col-form-label">{{ StoreForm.phone.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.phone }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.email}}" class="col-form-label">{{ StoreForm.email.label }}</label>
+                        <label for="{{ StoreForm.email.id_for_label }}" class="col-form-label">{{ StoreForm.email.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.email }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.street}}" class="col-form-label">{{ StoreForm.street.label }}</label>
+                        <label for="{{ StoreForm.street.id_for_label }}" class="col-form-label">{{ StoreForm.street.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.street }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.city}}" class="col-form-label">{{ StoreForm.city.label }}</label>
+                        <label for="{{ StoreForm.city.id_for_label }}" class="col-form-label">{{ StoreForm.city.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.city }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.state}}" class="col-form-label">{{ StoreForm.state.label }}</label>
+                        <label for="{{ StoreForm.state.id_for_label }}" class="col-form-label">{{ StoreForm.state.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.state }}
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="{{StoreForm.zip_code}}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
+                        <label for="{{ StoreForm.zip_code.id_for_label }}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
                         <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
                             {{ StoreForm.zip_code }}
                         </div>
@@ -88,20 +90,27 @@
                 </div>
                 <div class="card-body">
 
-                    <table id="storesTable">
+                    <table id="storesTable" class="display">
                         <thead>
                             <tr>
-                                <th>Store_id</th>
-                                <th>Store_name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Street</th>
-                                <th>City</th>
-                                <th>State</th>
-                                <th>Zip Code</th>
+                                <th scope="col">Store_id</th>
+                                <th scope="col">Store_name</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Street</th>
+                                <th scope="col">City</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Zip Code</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in tabela %}
+                        <tr>
+                            {% for x in item %}
+                                <td>{{ x }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
 

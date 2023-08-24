@@ -72,23 +72,23 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Tables
             </a>
-            <a class="nav-link {% if 'customers' in segment %} active {% endif %}" href="customers_table.html">
+            <a class="nav-link {% if 'customers' in segment %} active {% endif %}" href="{% url 'customers_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Customers
             </a>
-            <a class="nav-link {% if 'stores' in segment %} active {% endif %}" href="stores_table.html">
+            <a class="nav-link {% if 'stores' in segment %} active {% endif %}" href="{% url 'stores_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Stores
             </a>
-            <a class="nav-link {% if 'order_items' in segment %} active {% endif %}" href="order_items_table.html">
+            <a class="nav-link {% if 'order_items' in segment %} active {% endif %}" href="{% url 'order_items_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Order items
             </a>
-            <a class="nav-link {% if 'orders' in segment %} active {% endif %}" href="orders_table.html">
+            <a class="nav-link {% if 'orders' in segment %} active {% endif %}" href="{% url 'orders_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Orders
             </a>
-            <a class="nav-link {% if 'staffs' in segment %} active {% endif %}" href="staffs_table.html">
+            <a class="nav-link {% if 'staffs' in segment %} active {% endif %}" href="{% url 'staffs_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Staffs
             </a>

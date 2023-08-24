@@ -10,10 +10,10 @@
 
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Staffs</h1>
+            <h1 class="mt-4">Orders</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                <li class="breadcrumb-item active">Staffs</li>
+                <li class="breadcrumb-item active">Orders</li>
             </ol>
             <div class="card mb-4">
                
@@ -21,24 +21,29 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    Staffs data table
+                    Orders table
                 </div>
                 <div class="card-body">
 
-                    <table id="staffsTable" style="width: 1695px;">
+                    <table id="ordersTable" class="display">
                         <thead>
                             <tr>
-                                <th>Staff id</th>
-                                <th>First name</th>
-                                <th>Last name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Active</th>
-                                <th>Store</th>
-                                <th>Manager</th>
+                                <th scope="col">Order id</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Order Status</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Store</th>
+                                <th scope="col">Staff</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in tabela %}
+                        <tr>
+                            {% for x in item %}
+                                <td>{{ x }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
 
