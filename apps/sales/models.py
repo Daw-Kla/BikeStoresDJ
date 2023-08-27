@@ -86,6 +86,3 @@ class Staffs(models.Model):
     #this method allows us to display exatly what we want in admin panel
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
-
-

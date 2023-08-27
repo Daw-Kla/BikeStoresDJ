@@ -7,7 +7,7 @@ from .models import Stores
 class StoreForm(forms.Form):
 
     store_name = forms.CharField(
-        label='store_name',
+        label='Store name',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -20,7 +20,7 @@ class StoreForm(forms.Form):
     )
 
     phone = forms.CharField(
-        label='phone: *',
+        label='Phone:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -32,7 +32,7 @@ class StoreForm(forms.Form):
     )
 
     email = forms.CharField(
-        label='email: *',
+        label='E-mail:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -44,7 +44,7 @@ class StoreForm(forms.Form):
     )
 
     street = forms.CharField(
-        label='street: *',
+        label='Street:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -56,7 +56,7 @@ class StoreForm(forms.Form):
     )
 
     city = forms.CharField(
-        label='city: *',
+        label='City:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -68,7 +68,7 @@ class StoreForm(forms.Form):
     )
 
     state = forms.CharField(
-        label='state: *',
+        label='State:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -80,7 +80,7 @@ class StoreForm(forms.Form):
     )
 
     zip_code = forms.CharField(
-        label='zip_code: *',
+        label='Zip code:',
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -100,8 +100,3 @@ class StoreForm(forms.Form):
         city = cleaned_data.get("city")
         state = cleaned_data.get("state")
         zip_code = cleaned_data.get("zip_code")
-
-class MyForm(forms.Form):
-    a = forms.CharField(max_length=20)
-    mat = forms.CharField(max_length=200)
-    

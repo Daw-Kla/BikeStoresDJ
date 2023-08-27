@@ -16,74 +16,84 @@
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                 <li class="breadcrumb-item active">Stores</li>
             </ol>
-            <div style="height: 60px;">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" form="storeForm">Add new store</button>
+            <div style="height: 60px">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addingStore">Add new store</button>
             </div>
+                <div class="modal fade" id="addingStore" tabindex="-1" role="dialog" aria-labelledby="addingStoreLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addingStoreLabel">Adding store</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">{% csrf_token %}
+                            {{ form }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
+                        <!--<form method="post" id="StoreForm">{% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.store_name.id_for_label }}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.store_name }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.phone.id_for_label }}" class="col-form-label">{{ StoreForm.phone.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.phone }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.email.id_for_label }}" class="col-form-label">{{ StoreForm.email.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.email }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.street.id_for_label }}" class="col-form-label">{{ StoreForm.street.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.street }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.city.id_for_label }}" class="col-form-label">{{ StoreForm.city.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.city }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.state.id_for_label }}" class="col-form-label">{{ StoreForm.state.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.state }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ StoreForm.zip_code.id_for_label }}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
+                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
+                                    {{ StoreForm.zip_code }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="addStoreBtn">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
 
-            <!--pop up window for adding new data-->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Adding new store</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                
-                <div class="modal-body">
-                    <form method="post" id="StoreForm">{% csrf_token %}
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.store_name.id_for_label }}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.store_name }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.phone.id_for_label }}" class="col-form-label">{{ StoreForm.phone.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.phone }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.email.id_for_label }}" class="col-form-label">{{ StoreForm.email.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.email }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.street.id_for_label }}" class="col-form-label">{{ StoreForm.street.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.street }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.city.id_for_label }}" class="col-form-label">{{ StoreForm.city.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.city }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.state.id_for_label }}" class="col-form-label">{{ StoreForm.state.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.state }}
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="{{ StoreForm.zip_code.id_for_label }}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
-                        <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                            {{ StoreForm.zip_code }}
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addStoreBtn">Add</button>
-                </div>
-            </form>
-                </div>
-            </div>
-            </div>
-
-            <div>
+            <div id="Stores table">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
                     Stores data table

@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
     });
 
-    $(document).ready(function() {
+    /*$(document).ready(function() {
         let dataTable = $('#ordersTable').DataTable({
             dom: 'Bftrip',
             buttons: [],
@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', event => {
                 }
             });
         });
-    });
+    });*/
 
 
 });
