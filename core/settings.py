@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.production',  # Enable the inner home (home)
     'apps.sales',
+    "django_static_fontawesome",
     #'apps.home'
 ]
 

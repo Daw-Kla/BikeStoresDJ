@@ -19,79 +19,50 @@
             <div style="height: 60px">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addingStore">Add new store</button>
             </div>
+            <!--modals-->
                 <div class="modal fade" id="addingStore" tabindex="-1" role="dialog" aria-labelledby="addingStoreLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addingStoreLabel">Adding store</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">{% csrf_token %}
-                            {{ form }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                        </form>
-                    </div>
-                </div>
-                </div>
-                        <!--<form method="post" id="StoreForm">{% csrf_token %}
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.store_name.id_for_label }}" class="col-form-label">{{ StoreForm.store_name.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.store_name }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.phone.id_for_label }}" class="col-form-label">{{ StoreForm.phone.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.phone }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.email.id_for_label }}" class="col-form-label">{{ StoreForm.email.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.email }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.street.id_for_label }}" class="col-form-label">{{ StoreForm.street.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.street }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.city.id_for_label }}" class="col-form-label">{{ StoreForm.city.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.city }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.state.id_for_label }}" class="col-form-label">{{ StoreForm.state.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.state }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ StoreForm.zip_code.id_for_label }}" class="col-form-label">{{ StoreForm.zip_code.label }}</label>
-                                <div class="col-sm-6 col-md-5 col-lg-4 col-xl-6">
-                                    {{ StoreForm.zip_code }}
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addingStoreLabel">Adding store</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post">{% csrf_token %}
+                                {{ form }}
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="addStoreBtn">Add</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>-->
+
+                <div class="modal fade" id="editStore" tabindex="-1" role="dialog" aria-labelledby="editStoreLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editStoreLabel">Editing store</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editStoreForm">{% csrf_token %}
+                                {{ form }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
             <div id="Stores table">
                 <div class="card-header">
@@ -103,7 +74,7 @@
                     <table id="storesTable" class="display">
                         <thead>
                             <tr>
-                                <th scope="col">Store_id</th>
+                                <th scope="col">id {{tabela.store_id}}</th>
                                 <th scope="col">Store_name</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Email</th>
@@ -111,6 +82,7 @@
                                 <th scope="col">City</th>
                                 <th scope="col">State</th>
                                 <th scope="col">Zip Code</th>
+                                <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -118,12 +90,24 @@
                         <tr>
                             {% for x in item %}
                                 <td>{{ x }}</td>
-                            {% endfor %}
+                                {% endfor %}
+                                
+                            <td>
+                                <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownLink">
+                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editButt" href="{% url 'edit_store' item.0 %}" data-bs-toggle="modal" data-bs-target="editStore">Edit record</a></li>
+                                    <li><a class="dropdown-item" href="#">Delete record</a></li>
+                                </ul>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-
+                    
                 </div>
             </div>
         </div>

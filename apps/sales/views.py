@@ -6,6 +6,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from .models import *
 from .forms import StoreForm
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 import json
 from django.template import loader
 
@@ -27,13 +28,53 @@ def customers_table(request):
 
 #@ensure_csrf_cookie
 
+def edit_store(request, store_id):
+    store = Stores.objects.get(pk=store_id)
+    form = StoreForm()
+
+    if request.method == 'POST':
+        form = StoreForm(request.POST or None)
+        if form.is_valid():
+            cd = form.cleaned_data
+            form = Stores(store_name=cd['store_name'],
+                        phone=cd['phone'],
+                        email=cd['email'],
+                        street=cd['street'],
+                        city=cd['city'],
+                        state=cd['state'],
+                        zip_code=cd['zip_code'])
+            # Finally write the changes into database
+            form.save() 
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    
+    else:
+        form = StoreForm()
+
+    data = {
+        'store_id': store_id,
+        'form_data': {
+            'store_name': store.store_name,
+            'phone': store.phone,
+            'email': store.email,
+            'street': store.street,
+            'city': store.city,
+            'state': store.state,
+            'zip_code': store.zip_code,
+        }
+    }
+
+    return JsonResponse(data)
+
 def stores_table(request):
     object_list = Stores.objects.all()
     dane = []
     context = {}
+
     for item in object_list:
         dane.append([item.store_id, item.store_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
-
+    
     if request.method =='POST': 
         # Pass the form data to the form class
         details = StoreForm(request.POST)
@@ -61,14 +102,13 @@ def stores_table(request):
         else:
             # Redirect back to the same page if the data
             # was invalid
-            print('xd')
             return redirect('/stores_table/')
     else:
         pc = StoreForm()
 
     context['tabela'] = dane
     context['form'] = pc
-
+    
     return render(request, 'sales\stores_table.html', context)
 
 '''def stores(request):

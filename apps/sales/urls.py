@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('customers_table/', views.customers_table,  name='customers_table'),
     path('stores_table/', views.stores_table,  name='stores_table'),
+    path('edit_store/<int:store_id>/', views.edit_store, name='edit_store'),    #??????
     #path('test/', views.create_store, name='test'),                    #form for adding new store test
     path('order_items_table/', views.order_items_table,  name='order_items_table'),
     path('load_page_order_items', views.order_items_table, name='order_items'),
