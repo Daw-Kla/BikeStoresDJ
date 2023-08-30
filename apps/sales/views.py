@@ -30,27 +30,32 @@ def customers_table(request):
 
 def edit_store(request, store_id):
     store = Stores.objects.get(pk=store_id)
-    form = StoreForm()
 
     if request.method == 'POST':
-        form = StoreForm(request.POST or None)
+        form = StoreForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            form = Stores(store_name=cd['store_name'],
-                        phone=cd['phone'],
-                        email=cd['email'],
-                        street=cd['street'],
-                        city=cd['city'],
-                        state=cd['state'],
-                        zip_code=cd['zip_code'])
-            # Finally write the changes into database
-            form.save() 
+            store.store_name = cd['store_name']
+            store.phone = cd['phone']
+            store.email = cd['email']
+            store.street = cd['street']
+            store.city = cd['city']
+            store.state = cd['state']
+            store.zip_code = cd['zip_code']
+            store.save()  # Zapisujemy zmienione dane do bazy danych
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
-    
     else:
-        form = StoreForm()
+        form = StoreForm(initial={
+            'store_name': store.store_name,
+            'phone': store.phone,
+            'email': store.email,
+            'street': store.street,
+            'city': store.city,
+            'state': store.state,
+            'zip_code': store.zip_code,
+        })
 
     data = {
         'store_id': store_id,
@@ -66,6 +71,11 @@ def edit_store(request, store_id):
     }
 
     return JsonResponse(data)
+
+def get_stores_data(request):
+    stores = Stores.objects.all()
+    data = [[store.store_id, store.store_name, store.phone, store.email, store.street, store.city, store.state, store.zip_code] for store in stores]
+    return JsonResponse(data, safe=False)
 
 def stores_table(request):
     object_list = Stores.objects.all()

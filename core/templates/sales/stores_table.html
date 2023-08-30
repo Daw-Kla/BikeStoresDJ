@@ -52,14 +52,15 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="" method="post" id="editStoreForm">{% csrf_token %}
-                                {{ form }}
+                        <form action="" method="post" id="editStoreForm">{% csrf_token %}
+                            {{ form }}
+                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button type="submit" class="btn btn-primary" id="SubmitEdit">Submit</button>
                         </div>
-                            </form>
+                        </form>
                         </div>
                     </div>
                 </div>
