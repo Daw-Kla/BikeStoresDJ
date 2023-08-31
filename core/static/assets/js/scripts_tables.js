@@ -97,9 +97,9 @@ submitButton.addEventListener('click', function (event) {
         if (data.success) {
             console.log('Record updated successfully');
             // Tutaj możesz obsłużyć sukces, np. zamknąć modal lub wyświetlić komunikat
-            //const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
+            const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
             refreshTable()
-            //const modal = new bootstrap.Modal(document.getElementById('editStore'));
+            //const modal = new bootstrap.Modal(document.getElementById('#editStore'));
             //modal.hide();
             //modal.remove();
         } else {
