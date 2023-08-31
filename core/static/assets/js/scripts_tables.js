@@ -63,8 +63,8 @@ editButtons.forEach(button => {
                 form.zip_code.value = data.form_data.zip_code;
 
                 // Wyświetl modal
-                const modal = new bootstrap.Modal(document.getElementById('editStore'));
-                modal.show();
+                //const modal = new bootstrap.Modal(document.getElementById('editStore'));
+                //modal.show();
             })
             .catch(error => {
                 console.error('Error fetching data from Django:', error);
@@ -99,8 +99,9 @@ submitButton.addEventListener('click', function (event) {
             // Tutaj możesz obsłużyć sukces, np. zamknąć modal lub wyświetlić komunikat
             //const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
             refreshTable()
-            const modal = new bootstrap.Modal(document.getElementById('editStore'));
-            modal.hide();
+            //const modal = new bootstrap.Modal(document.getElementById('editStore'));
+            //modal.hide();
+            //modal.remove();
         } else {
             console.error('Error updating record:', data.errors);
             // Tutaj możesz obsłużyć błędy, np. wyświetlić komunikat z błędami
