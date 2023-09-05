@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRedirect
-# Create your views here.
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 from .models import *
@@ -26,11 +25,9 @@ def customers_table(request):
         'first_name', 'last_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))
     return JsonResponse(result_list, safe=False)'''
 
-#@ensure_csrf_cookie
-
 def edit_store(request, store_id):
     store = Stores.objects.get(pk=store_id)
-
+    print('in editr')
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
@@ -69,8 +66,15 @@ def edit_store(request, store_id):
             'zip_code': store.zip_code,
         }
     }
-
     return JsonResponse(data)
+
+def delete_store(request, store_id):
+    if request.method == 'POST':
+        store = Stores.objects.get(pk=store_id)
+        store.delete()
+        return redirect('/stores_table/')
+    
+    return redirect('/stores_table/')
 
 def get_stores_data(request):
     stores = Stores.objects.all()
@@ -79,22 +83,18 @@ def get_stores_data(request):
 
 def stores_table(request):
     object_list = Stores.objects.all()
-    dane = []
+    data = []
     context = {}
 
     for item in object_list:
-        dane.append([item.store_id, item.store_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
+        data.append([item.store_id, item.store_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
     
     if request.method =='POST': 
         # Pass the form data to the form class
         details = StoreForm(request.POST)
-        # In the 'form' class the clean function
-        # is defined, if all the data is correct
-        # as per the clean function, it returns true
+        # In the 'form' class the clean function is defined, if all the data is correct as per the clean function, it returns true
         if details.is_valid(): 
-            # Temporarily make an object to be add some
-            # logic into the data if there is such a need
-            # before writing to the database  
+            # Temporarily make an object to be add some logic into the data if there is such a need before writing to the database  
             cd = details.cleaned_data
             pc = Stores(store_name=cd['store_name'],
                         phone=cd['phone'],
@@ -103,20 +103,18 @@ def stores_table(request):
                         city=cd['city'],
                         state=cd['state'],
                         zip_code=cd['zip_code'])
-            # Finally write the changes into database
             pc.save() 
             pc = StoreForm()
-            #after succesfull POST there is redirect to the same page for getinf out of POST method dooing GET 
+            # after succesfull POST there is redirect to the same page for getinf out of POST method dooing GET 
             #(prevent from continous data send do DB after refreshing the page)
             return redirect('/stores_table/')
         else:
-            # Redirect back to the same page if the data
-            # was invalid
+            # Redirect back to the same page if the data was invalid
             return redirect('/stores_table/')
     else:
         pc = StoreForm()
 
-    context['tabela'] = dane
+    context['table'] = data
     context['form'] = pc
     
     return render(request, 'sales\stores_table.html', context)
@@ -125,27 +123,6 @@ def stores_table(request):
     result_list = list(Stores.objects.all().values('store_id', 'store_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))
     return JsonResponse(result_list, safe=False)'''
 
-
-#testowe nie działające wyświetlanie formsa
-# Create your views here.
-'''def form_handle(request):
-    if request.method == 'POST':
-        form = MyForm(request.POST) # if post method then form will be validated
-        if form.is_valid():
-            cd = form.cleaned_data
-            num1 = cd.get('num1')
-            num2 = cd.get('num2')
-            result = cd.get('result')
-            if float(num1) + float(num2) == float(result):
-                # give HttpResponse only or render page you need to load on success
-                return HttpResponse("valid entiries")
-            else:
-                # if sum not equal... then redirect to custom url/page 
-                return HttpResponseRedirect('/')  # mention redirect url in argument
-
-    else:
-        form = MyForm() # blank form object just to pass context if not post method
-    return render(request, "test.html", {'form': form})'''
 
 def order_items_table(request):
     object_list = OrderItems.objects.all()

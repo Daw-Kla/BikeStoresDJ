@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', event => {
     
+    //table handle
     $(document).ready(function(){
         $('table.display').DataTable({
             dom: 'Bftrip',
@@ -9,16 +10,14 @@ window.addEventListener('DOMContentLoaded', event => {
         });
 
     });
-//działa odświeżanie, nie działa zamykanie modalu
+
     function refreshTable() {
-        const tableRows = document.querySelectorAll('#storesTable tbody tr'); // Znajdź wszystkie wiersze tabeli
-        const url = '/get_stores_data/'; // Adres URL do pobrania najnowszych danych
-    
-        // Wysłanie żądania AJAX do pobrania danych
+        const tableRows = document.querySelectorAll('#storesTable tbody tr'); // finding all table rows
+        const url = '/get_stores_data/'; // url for get actual data
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                // Iteruj przez wiersze tabeli i aktualizuj komórki
+                // iteration throung table rowas and updating cell values
                 tableRows.forEach((row, rowIndex) => {
                     const item = data[rowIndex];
                     const cells = row.querySelectorAll('td');
@@ -34,84 +33,126 @@ window.addEventListener('DOMContentLoaded', event => {
     }
      
 
-const editButtons = document.querySelectorAll('#editButt');
-let globalStoreId = 0
-const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
+    const editButtons = document.querySelectorAll('#editButt');
+    let globalStoreId = 0
+    const form = document.querySelector('#editStoreForm');
 
-editButtons.forEach(button => {
-    button.addEventListener('click', function (event) {
+    editButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const storeId = button.getAttribute('data-value');
+            console.log(storeId)
+            globalStoreId = storeId
+            console.log(globalStoreId)
+            const url = `/edit_store/${storeId}/`; // url creating
+            console.log(url)
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received data from Django:', data);
+                    
+                    // fill the form fields
+                    form.store_name.value = data.form_data.store_name;
+                    form.phone.value = data.form_data.phone;
+                    form.email.value = data.form_data.email;
+                    form.street.value = data.form_data.street;
+                    form.city.value = data.form_data.city;
+                    form.state.value = data.form_data.state;
+                    form.zip_code.value = data.form_data.zip_code;
+                })
+                .catch(error => {
+                    console.error('Error fetching data from Django:', error);
+                });
+        });
+    });
+
+    const submitEdit = document.querySelector('#SubmitEdit');
+
+    submitEdit.addEventListener('click', function (event) {
         event.preventDefault();
-        const storeId = button.getAttribute('data-value'); // Tu używamy data-value
+        storeId = globalStoreId
         console.log(storeId)
-        globalStoreId = storeId
-        const url = `/edit_store/${storeId}/`; // Tworzymy URL
-        console.log(url)
-        // Wysłanie żądania AJAX do Django
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Received data from Django:', data);
-                
-                // Wypełnij pola formularza
-                //const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
-                form.store_name.value = data.form_data.store_name;
-                form.phone.value = data.form_data.phone;
-                form.email.value = data.form_data.email;
-                form.street.value = data.form_data.street;
-                form.city.value = data.form_data.city;
-                form.state.value = data.form_data.state;
-                form.zip_code.value = data.form_data.zip_code;
 
-                // Wyświetl modal
-                //const modal = new bootstrap.Modal(document.getElementById('editStore'));
-                //modal.show();
-            })
-            .catch(error => {
-                console.error('Error fetching data from Django:', error);
-            });
+        const form = document.querySelector('#editStoreForm');
+        const formData = new FormData(form);
+        const updateUrl = `http://127.0.0.1:8000/edit_store/${storeId}/`;
+
+        fetch(updateUrl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // success handling
+                console.log('Record updated successfully');
+                const form = document.querySelector('#editStoreForm'); // find form on page
+                refreshTable()
+            } else {
+                //errors handling
+                console.error('Error updating record:', data.errors);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating record:', error);
+        });
     });
-});
-
-const submitButton = document.querySelector('#SubmitEdit');
-
-console.log(submitButton)
-submitButton.addEventListener('click', function (event) {
-    console.log(submitButton)
-    event.preventDefault();
-    console.log('in')
-    //const storeId = submitButton.getAttribute('data-value'); // Pobierz store_id z przycisku
-    storeId = globalStoreId
-    console.log(storeId)
-
-    const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
-
-    const formData = new FormData(form);
-    const updateUrl = `http://127.0.0.1:8000/edit_store/${storeId}/`;
-
-    fetch(updateUrl, {
-        method: 'POST',
-        body: formData
+ 
+    //taking record id from dropdownlink
+    const global = document.querySelectorAll('#dropdownLink');
+    let globalId = 0
+    global.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const storeId = button.getAttribute('data-value');
+            globalId = storeId
+            console.log(globalId)
+        });
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Record updated successfully');
-            // Tutaj możesz obsłużyć sukces, np. zamknąć modal lub wyświetlić komunikat
-            const form = document.querySelector('#editStoreForm'); // Znajdź formularz w modalu
-            refreshTable()
-            //const modal = new bootstrap.Modal(document.getElementById('#editStore'));
-            //modal.hide();
-            //modal.remove();
-        } else {
-            console.error('Error updating record:', data.errors);
-            // Tutaj możesz obsłużyć błędy, np. wyświetlić komunikat z błędami
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Find cookie with csrf token
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
         }
-    })
-    .catch(error => {
-        console.error('Error updating record:', error);
-    });
-});
+        return cookieValue;
+    }
 
+    const submitDelete = document.querySelector('#submitDelete');
+    submitDelete.addEventListener('click', function (event) {
+        //event.preventDefault();
+        storeId = globalId
+        const updateUrl = `/delete_store/${storeId}/`;
+        const csrftoken = getCookie('csrftoken'); // Download csrf token
+        fetch(updateUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                // refresh whole page
+                location.reload()
+            } else {
+                console.error('There was a mistake during deleting a record');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+
+    //big tables rendering
     /*$(document).ready(function() {
         let dataTable = $('#ordersTable').DataTable({
             dom: 'Bftrip',
@@ -122,7 +163,6 @@ submitButton.addEventListener('click', function (event) {
 
         ordersTable.on('page.dt', function () {
             const currentPage = ordersTable.page.info().page;
-            // Wysyłasz zapytanie AJAX, aby pobrać dane dla danej strony
             $.ajax({
                 url: `/load_page_orders/${currentPage + 1}/`,
                 method: 'GET',

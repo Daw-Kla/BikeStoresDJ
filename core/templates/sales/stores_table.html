@@ -48,25 +48,41 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="editStoreLabel">Editing store</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <!--<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">-->
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                        <form action="" method="post" id="editStoreForm">{% csrf_token %}
+                            <form action="" method="post" id="editStoreForm">{% csrf_token %}
                             {{ form }}
-                            
                         </div>
-                    </form>
+                            </form>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <!--<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
                             <button type="submit" class="btn btn-primary" id="SubmitEdit" data-dismiss="modal">Submit</button>
                         </div>
-                        
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="deleteStore" tabindex="-1" aria-labelledby="deleteStoreLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="deleteStoreLabel">Deleting record</h5>
+                          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="deleteStoreForm">{% csrf_token %}
+                                Do you really want to delete this record?
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" id="submitDelete" data-dismiss="modal">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
             <div id="Stores table">
                 <div class="card-header">
@@ -78,7 +94,7 @@
                     <table id="storesTable" class="display">
                         <thead>
                             <tr>
-                                <th scope="col">id {{tabela.store_id}}</th>
+                                <th scope="col">id {{table.store_id}}</th>
                                 <th scope="col">Store_name</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Email</th>
@@ -90,20 +106,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in tabela %}
+                            {% for item in table %}
                         <tr>
                             {% for x in item %}
                                 <td>{{ x }}</td>
                                 {% endfor %}
                             <td>
                                 <div class="dropdown">
-                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownLink" data-value="{{item.0}}" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-cogs"></i>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownLink">
                                     <li><a class="dropdown-item" data-value="{{item.0}}" id="editButt" href="{% url 'edit_store' item.0 %}" data-toggle="modal" data-target="#editStore">Edit record</a></li>
-                                    <!--<li><a class="dropdown-item" data-value="{{item.0}}" id="editButt" href="{% url 'edit_store' item.0 %}" data-bs-toggle="modal" data-target="#editStore">Edit record</a></li>-->
-                                    <li><a class="dropdown-item" href="#">Delete record</a></li>
+                                    <li><a type="button" class="dropdown-item" id="deleteButt" href="" data-toggle="modal" data-target="#deleteStore">Delete record</a></li>
                                 </ul>
                                 </div>
                             </td>
@@ -111,7 +126,6 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    
                 </div>
             </div>
         </div>
