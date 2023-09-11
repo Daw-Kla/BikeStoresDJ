@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-
+from django.core.exceptions import ObjectDoesNotExist
 from .models import *
-from .forms import StoreForm
+from .forms import StoreForm, StaffForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.template import loader
 
-#views take one argument 'request' 
 
 def customers_table(request):
     object_list = Customers.objects.all()
@@ -158,18 +158,114 @@ def orders_table(request):
 
 def staffs_table(request):
     object_list = Staffs.objects.all()
-    dane = []
+    data = []
     context = {}
+    #stores = Stores.objects.all()
     #print(x[1]['store__store_name'])
     for item in object_list:
         storeName = item.store.store_name if item.store else None
         y = item.manager.first_name if item.manager else None
         z = item.manager.last_name if item.manager else None
         manager = f'{y} {z}'
-        dane.append([item.staff_id, item.first_name, item.last_name, item.email, item.phone, item.active, storeName, manager])
+        data.append([item.staff_id, item.first_name, item.last_name, item.email, item.phone, item.active, storeName, manager])
     
-    context['tabela'] = dane
+    if request.method =='POST': 
+        # Pass the form data to the form class
+        details = StaffForm(request.POST)
+        
+        # In the 'form' class the clean function is defined, if all the data is correct as per the clean function, it returns true
+        if details.is_valid(): 
+            # Temporarily make an object to be add some logic into the data if there is such a need before writing to the database  
+            cd = details.cleaned_data
+            store_instance = Stores.objects.get(store_name=cd['store'])
+            try:
+                # check if there is a emlploeyy witch given no
+                manager_instance = Staffs.objects.get(pk=cd['manager'].pk)
+            except ObjectDoesNotExist:
+                # if not then chacge instance
+                manager_instance = None
+
+            pc = Staffs(first_name=cd['first_name'],
+                        last_name=cd['last_name'],
+                        email=cd['email'],
+                        phone=cd['phone'],
+                        active=cd['active'],
+                        store=store_instance,
+                        manager=manager_instance,)
+            pc.save() 
+            pc = StaffForm()
+            # after succesfull POST there is redirect to the same page for getinf out of POST method dooing GET 
+            #(prevent from continous data send do DB after refreshing the page)
+            return redirect('/staffs_table/')
+        else:
+            # Redirect back to the same page if the data was invalid
+            return redirect('/staffs_table/')
+    else:
+        pc = StaffForm()
+
+    context['table'] = data
+    context['form'] = pc
     return render(request, 'sales\staffs_table.html', context)
+
+
+def edit_staff(request, staff_id):
+    staff = Staffs.objects.get(pk=staff_id)
+
+    if request.method == 'POST':
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            staff.first_name = cd['first_name']
+            staff.last_name = cd['last_name']
+            staff.email = cd['email']
+            staff.phone = cd['phone']
+            staff.active = cd['active']
+            staff.store = cd['store']
+            staff.manager = cd['manager']
+            staff.save()  # Zapisujemy zmienione dane do bazy danych
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = StoreForm(initial={
+            'first_name': staff.first_name,
+            'last_name': staff.last_name,
+            'email': staff.email,
+            'phone': staff.phone,
+            'active': staff.active,
+            'store': staff.store_id if staff.store else None,
+            'manager': staff.manager_id if staff.manager else None,
+        })
+
+    data = {
+        'staff_id': staff_id,
+        'form_data': {
+            'first_name': staff.first_name,
+            'last_name': staff.last_name,
+            'email': staff.email,
+            'phone': staff.phone,
+            'active': staff.active,
+            'store': staff.store.store_name if staff.store else None,
+            'manager': f'{staff.manager.first_name} {staff.manager.last_name}' if staff.manager else None,
+        }
+    }
+    print(data)
+    return JsonResponse(data, encoder=DjangoJSONEncoder)
+
+def get_staffs_data(request):
+    staffs = Staffs.objects.all()
+    data = [{'staff_id': staff.staff_id,
+             'first_name': staff.first_name,
+             'last_name': staff.last_name,
+             'email': staff.email,
+             'phone': staff.phone,
+             'active': staff.active,
+             'store': staff.store.store_name if staff.store else None,
+             'manager': f'{staff.manager.first_name} {staff.manager.last_name}' if staff.manager else None} for staff in staffs]
+    #data do jsonresponse must be a list of lists
+    data_list = [[staff['staff_id'], staff['first_name'], staff['last_name'], staff['email'], staff['phone'], staff['active'], staff['store'], staff['manager']] for staff in data]
+    return JsonResponse(data_list, safe=False)
+
 
 '''def staffs(request):
     result_list = list(Staffs.objects.all().values('staff_id', 'first_name', 'last_name', 'email', 'phone', 'active', 'store__store_name', 'manager__first_name', 'manager__last_name'))

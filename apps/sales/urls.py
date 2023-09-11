@@ -10,13 +10,18 @@ urlpatterns = [
     #re_path(r'^.*\.*', views.pages, name='pages'),
 
     path('customers_table/', views.customers_table,  name='customers_table'),
+
     path('stores_table/', views.stores_table,  name='stores_table'),
     path('edit_store/<int:store_id>/', views.edit_store, name='edit_store'), 
     path('delete_store/<int:store_id>/', views.delete_store, name='delete_store'),
     path('get_stores_data/', views.get_stores_data, name='get_stores_data'),
+
     path('order_items_table/', views.order_items_table,  name='order_items_table'),
     path('load_page_order_items', views.order_items_table, name='order_items'),
     path('orders_table/', views.orders_table,  name='orders_table'),
     #path('jsonresponse/orders', views.orders, name='orders'),
+
     path('staffs_table/', views.staffs_table,  name='staffs_table'),
+    path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
+    path('get_staffs_data/', views.get_staffs_data, name='get_staffs_data'),
 ]

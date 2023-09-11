@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django.forms import ModelForm
 from django import forms
-from .models import Stores
+from .models import Stores, Staffs
 
 
 class StoreForm(forms.Form):
@@ -18,7 +18,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     phone = forms.CharField(
         label='Phone:',
         required=True,
@@ -30,7 +29,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     email = forms.CharField(
         label='E-mail:',
         required=True,
@@ -42,7 +40,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     street = forms.CharField(
         label='Street:',
         required=True,
@@ -54,7 +51,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     city = forms.CharField(
         label='City:',
         required=True,
@@ -66,7 +62,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     state = forms.CharField(
         label='State:',
         required=True,
@@ -78,7 +73,6 @@ class StoreForm(forms.Form):
             }
         )
     )
-
     zip_code = forms.CharField(
         label='Zip code:',
         required=True,
@@ -100,3 +94,98 @@ class StoreForm(forms.Form):
         city = cleaned_data.get("city")
         state = cleaned_data.get("state")
         zip_code = cleaned_data.get("zip_code")
+
+
+class StaffForm(forms.Form):
+
+    first_name = forms.CharField(
+        label='First name:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'first_name',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'First name'
+            }
+        )
+    )
+    last_name = forms.CharField(
+        label='Last name:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'last_name',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Last name'
+            }
+        )
+    )
+    email = forms.CharField(
+        label='Email:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'email',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Email'
+            }
+        )
+    )
+    phone = forms.CharField(
+        label='Phone:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'phone',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Phone'
+            }
+        )
+    )
+    active = forms.CharField(
+        label='Active:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'active',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Is staff member acitve?'
+            }
+        )
+    )
+    store = forms.ModelChoiceField(
+        queryset=Stores.objects.all(),
+        label='Store:',
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'name': 'store',
+                'placeholder': '-----',
+                'class': 'form-control form-control-sm',
+            }
+        )
+    )
+    manager = forms.ModelChoiceField(
+        queryset=Staffs.objects.all(),
+        label='Manager:',
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'name': 'manager',
+                'placeholder': '-----',
+                'class': 'form-control form-control-sm',
+            }
+        )
+    )
+
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+        email = cleaned_data.get("email")
+        phone = cleaned_data.get("phone")
+        active = cleaned_data.get("active")
+        store = cleaned_data.get("store")
+        manager = cleaned_data.get("manager")
