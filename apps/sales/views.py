@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRed
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from .models import *
-from .forms import StoreForm, StaffForm
+from .forms import StoreForm, StaffForm, CustomerForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 import json
@@ -14,21 +14,101 @@ from django.template import loader
 
 def customers_table(request):
     object_list = Customers.objects.all()
-    dane = []
+    data = []
     context = {}
+
     for item in object_list:
-        dane.append([item.first_name, item.last_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
-    context['tabela'] = dane
+        data.append([item.customer_id, item.first_name, item.last_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
+    context['table'] = data
+
+    if request.method =='POST':
+        details = CustomerForm(request.POST)
+
+        if details.is_valid():  
+            cd = details.cleaned_data
+            pc = Customers(first_name=cd['first_name'],
+                        last_name=cd['last_name'],
+                        phone=cd['phone'],
+                        email=cd['email'],
+                        street=cd['street'],
+                        city=cd['city'],
+                        state=cd['state'],
+                        zip_code=cd['zip_code'],)
+            pc.save() 
+            pc = CustomerForm()
+            return redirect('/customers_table/')
+        else:
+            return redirect('/customers_table/')
+    else:
+        pc = CustomerForm()
+
+    context['table'] = data
+    context['form'] = pc
+
     return render(request, 'sales\customers_table.html', context)
 
-'''def customers(request):
-    result_list = list(Customers.objects.all().values(\
-        'first_name', 'last_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))
-    return JsonResponse(result_list, safe=False)'''
+def edit_customer(request, customer_id):
+    customer = Customers.objects.get(pk=customer_id)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            customer.first_name = cd['first_name']
+            customer.last_name = cd['last_name']
+            customer.phone = cd['phone']
+            customer.email = cd['email']
+            customer.street = cd['street']
+            customer.city = cd['city']
+            customer.state = cd['state']
+            customer.zip_code = cd['zip_code']
+            customer.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = CustomerForm(initial={
+            'first_name': customer.first_name,
+            'last_name': customer.last_name,
+            'phone': customer.phone,
+            'email': customer.email,
+            'street': customer.street,
+            'city': customer.city,
+            'state': customer.state,
+            'zip_code': customer.zip_code,})
+        
+    data = {
+        'customer_id': customer_id,
+        'form_data': {
+            'first_name': customer.first_name,
+            'last_name': customer.last_name,
+            'phone': customer.phone,
+            'email': customer.email,
+            'street': customer.street,
+            'city': customer.city,
+            'state': customer.state,
+            'zip_code': customer.zip_code,
+        }
+    }
+
+    return JsonResponse(data)
+
+def get_customers_data(request):
+    customers = Customers.objects.all()
+    data = [[customer.customer_id, customer.first_name, customer.last_name, customer.phone, customer.email, customer.street, customer.city, customer.state, customer.zip_code] for customer in customers]
+    return JsonResponse(data, safe=False)
+
+def delete_customer(request, customer_id):
+    if request.method == 'POST':
+        store = Customers.objects.get(pk=customer_id)
+        store.delete()
+        return redirect('/customers_table/')
+    
+    return redirect('/stores_table/')
 
 def edit_store(request, store_id):
     store = Stores.objects.get(pk=store_id)
-    print('in editr')
+    
     if request.method == 'POST':
         form = StoreForm(request.POST)
         if form.is_valid():
@@ -267,6 +347,13 @@ def get_staffs_data(request):
     data_list = [[staff['staff_id'], staff['first_name'], staff['last_name'], staff['email'], staff['phone'], staff['active'], staff['store'], staff['manager']] for staff in data]
     return JsonResponse(data_list, safe=False)
 
+def delete_staff(request, staff_id):
+    if request.method == 'POST':
+        store = Staffs.objects.get(pk=staff_id)
+        store.delete()
+        return redirect('/staffs_table/')
+    
+    return redirect('/stores_table/')
 
 '''def staffs(request):
     result_list = list(Staffs.objects.all().values('staff_id', 'first_name', 'last_name', 'email', 'phone', 'active', 'store__store_name', 'manager__first_name', 'manager__last_name'))
