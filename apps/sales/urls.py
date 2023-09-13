@@ -10,6 +10,9 @@ urlpatterns = [
     #re_path(r'^.*\.*', views.pages, name='pages'),
 
     path('customers_table/', views.customers_table,  name='customers_table'),
+    path('edit_customer/<int:customer_id>/', views.edit_customer, name='edit_customer'), 
+    path('get_customers_data/', views.get_customers_data, name='get_customers_data'),
+    path('delete_customer/<int:customer_id>/', views.delete_customer, name='delete_customer'),
 
     path('stores_table/', views.stores_table,  name='stores_table'),
     path('edit_store/<int:store_id>/', views.edit_store, name='edit_store'), 
@@ -23,5 +26,6 @@ urlpatterns = [
 
     path('staffs_table/', views.staffs_table,  name='staffs_table'),
     path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
+    path('delete_staff/<int:staff_id>/', views.delete_staff, name='delete_staff'),
     path('get_staffs_data/', views.get_staffs_data, name='get_staffs_data'),
 ]

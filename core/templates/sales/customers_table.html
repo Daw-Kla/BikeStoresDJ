@@ -15,9 +15,74 @@
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                 <li class="breadcrumb-item active">Customers</li>
             </ol>
-            <div class="card mb-4">
-               
+            <div style="height: 60px">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addingCustomer">Add new customer</button>
             </div>
+            <!--modals-->
+                <div class="modal fade" id="addingCustomer" tabindex="-1" role="dialog" aria-labelledby="addingCustomerLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addingCustomerLabel">Adding new customer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post">{% csrf_token %}
+                                {{ form }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="editCustomer" tabindex="-1" role="dialog" aria-labelledby="editCustomerLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCustomerLabel">Editing store</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editCustomerForm">{% csrf_token %}
+                            {{ form }}
+                        </div>
+                            </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="submitCustomerEdit" data-dismiss="modal">Submit</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="deleteCustomer" tabindex="-1" aria-labelledby="deleteCustomerLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="deleteCustomerLabel">Deleting record</h5>
+                          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="deleteCustomerForm">{% csrf_token %}
+                                Do you really want to delete this record?
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" id="submitCustomerDelete" data-dismiss="modal">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
@@ -28,6 +93,7 @@
                     <table id="customersTable" class="display">
                         <thead>
                             <tr>
+                                <th scope="col">id {{table.customer_id}}</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
                                 <th scope="col">Phone</th>
@@ -36,15 +102,27 @@
                                 <th scope="col">City</th>
                                 <th scope="col">State</th>
                                 <th scope="col">Zip Code</th>
+                                <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         
                         <tbody>
-                            {% for item in tabela %}
+                            {% for item in table %}
                         <tr>
                             {% for x in item %}
                                 <td>{{ x }}</td>
                             {% endfor %}
+                            <td>
+                                <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownCustomer" data-value="{{item.0}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownCustomer">
+                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editCustomerButt" href="{% url 'edit_customer' item.0 %}" data-toggle="modal" data-target="#editCustomer">Edit record</a></li>
+                                    <li><a type="button" class="dropdown-item" id="deleteButt" href="" data-toggle="modal" data-target="#deleteCustomer">Delete record</a></li>
+                                </ul>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
 
