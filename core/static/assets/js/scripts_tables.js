@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', event => {
             });
     }
 
+    //fcn that takes a coockie from a session
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -49,46 +50,45 @@ window.addEventListener('DOMContentLoaded', event => {
         return cookieValue;
     }
 
-        const editStoreButtons = document.querySelectorAll('#editStoreButt');
-        let globalStoreId = 0
-        const form = document.querySelector('#editStoreForm');
-
+//=======================Stores page===================================
+    //editing a store record
+    const editStoreButtons = document.querySelectorAll('#editStoreButt');
+    const Storeform = document.querySelector('#editStoreForm');
+    let globalStoreId = 0
+    if ( editStoreButtons && Storeform){
         editStoreButtons.forEach(button => {
             button.addEventListener('click', function (event) {
                 event.preventDefault();
                 const storeId = button.getAttribute('data-value');
-                console.log(storeId)
                 globalStoreId = storeId
-                console.log(globalStoreId)
                 const url = `/edit_store/${storeId}/`; // url creating
-                console.log(url)
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         console.log('Received data from Django:', data);
                         
                         // fill the form fields
-                        form.store_name.value = data.form_data.store_name;
-                        form.phone.value = data.form_data.phone;
-                        form.email.value = data.form_data.email;
-                        form.street.value = data.form_data.street;
-                        form.city.value = data.form_data.city;
-                        form.state.value = data.form_data.state;
-                        form.zip_code.value = data.form_data.zip_code;
+                        Storeform.store_name.value = data.form_data.store_name;
+                        Storeform.phone.value = data.form_data.phone;
+                        Storeform.email.value = data.form_data.email;
+                        Storeform.street.value = data.form_data.street;
+                        Storeform.city.value = data.form_data.city;
+                        Storeform.state.value = data.form_data.state;
+                        Storeform.zip_code.value = data.form_data.zip_code;
                     })
                     .catch(error => {
                         console.error('Error fetching data from Django:', error);
                     });
             });
         });
+    }
 
-    if (window.location.pathname === 'http://127.0.0.1:8000/stores_table/') {
-        var submitStoreEdit = document.querySelector('#submitStoreEdit');
-
+    //submit store edition
+    var submitStoreEdit = document.querySelector('#submitStoreEdit');
+    if (submitStoreEdit){
         submitStoreEdit.addEventListener('click', function (event) {
             event.preventDefault();
             storeId = globalStoreId
-            console.log(storeId)
 
             const form = document.querySelector('#editStoreForm');
             const formData = new FormData(form);
@@ -114,24 +114,26 @@ window.addEventListener('DOMContentLoaded', event => {
                 console.error('Error updating record:', error);
             });
         });
-    
-    
-        //taking record id from dropdownlink
-        const global = document.querySelectorAll('#dropdownLink');
-        let globalId = 0
-        global.forEach(button => {
+    }
+
+    //taking record id from dropdownlink
+    const dropdownStore = document.querySelectorAll('#dropdownStore');
+    if (dropdownStore){
+        dropdownStore.forEach(button => {
             button.addEventListener('click', function (event) {
                 event.preventDefault();
                 const storeId = button.getAttribute('data-value');
-                globalId = storeId
-                console.log(globalId)
+                globalStoreId = storeId
             });
         })
+    }
 
-        const submitDelete = document.querySelector('#submitDelete');
-        submitDelete.addEventListener('click', function (event) {
+    //store record delete
+    const submitStoreDelete = document.querySelector('#submitStoreDelete');
+    if (submitStoreDelete){
+        submitStoreDelete.addEventListener('click', function (event) {
             //event.preventDefault();
-            storeId = globalId
+            storeId = globalStoreId
             const updateUrl = `/delete_store/${storeId}/`;
             const csrftoken = getCookie('csrftoken'); // Download csrf token
             fetch(updateUrl, {
@@ -153,47 +155,47 @@ window.addEventListener('DOMContentLoaded', event => {
             });
         });
     }
-//=======================Staffs===================================
 
+//=======================Staffs page===================================
+
+    //editing Staffs record
     const editStaffButtons = document.querySelectorAll('#editStaffButt');
-    let globalStaffId = 0
-    const Staffform = document.querySelector('#editStaffForm');
-    editStaffButtons.forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            const staffId = button.getAttribute('data-value');
-            console.log(staffId)
-            globalStaffId = staffId
-            console.log(globalStaffId)
-            const url = `/edit_staff/${staffId}/`; // url creating
-            console.log(url)
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Received data from Django:', data);
-                    
-                    // fill the form fields
-                    Staffform.first_name.value = data.form_data.first_name;
-                    Staffform.last_name.value = data.form_data.last_name;
-                    Staffform.email.value = data.form_data.email;
-                    Staffform.phone.value = data.form_data.phone;
-                    Staffform.active.value = data.form_data.active;
-                    Staffform.store.value = data.form_data.store;
-                    Staffform.manager.value = data.form_data.manager;
-                })
-                .catch(error => {
-                    console.error('Error fetching data from Django:', error);
-                });
-        }); 
-    });
+    const Stafform = document.querySelector('#editStaffForm');
+    if (editStaffButtons && Stafform){
+        let globalStaffId = 0
+        editStaffButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const staffId = button.getAttribute('data-value');
+                globalStaffId = staffId
+                const url = `/edit_staff/${staffId}/`; // url creating
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Received data from Django:', data);
+                        
+                        // fill the form fields
+                        Stafform.first_name.value = data.form_data.first_name;
+                        Stafform.last_name.value = data.form_data.last_name;
+                        Stafform.email.value = data.form_data.email;
+                        Stafform.phone.value = data.form_data.phone;
+                        Stafform.active.value = data.form_data.active;
+                        Stafform.store.value = data.form_data.store;
+                        Stafform.manager.value = data.form_data.manager;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Django:', error);
+                    });
+            }); 
+        });
+    }
 
-    //if (window.location.pathname === 'http://127.0.0.1:8000/staffs_table/') {
-        var SubmitStaffEdit = document.querySelector('#SubmitStaffEdit');
-
+    //submit staff edit
+    var SubmitStaffEdit = document.querySelector('#SubmitStaffEdit');
+    if (SubmitStaffEdit){
         SubmitStaffEdit.addEventListener('click', function (event) {
             event.preventDefault();
             staffId = globalStaffId
-            console.log(staffId)
 
             const form = document.querySelector('#editStaffForm');
             const formData = new FormData(form);
@@ -208,7 +210,6 @@ window.addEventListener('DOMContentLoaded', event => {
                 if (data.success) {
                     // success handling
                     console.log('Record updated successfully');
-                    const form = document.querySelector('#editStaffForm'); // find form on page
                     refreshTable('#staffsTable', '/get_staffs_data/')
                 } else {
                     //errors handling
@@ -219,35 +220,151 @@ window.addEventListener('DOMContentLoaded', event => {
                 console.error('Error updating record:', error);
             });
         });
-    //}
+    }
 
+    const dropdownStaffs = document.querySelectorAll('#dropdownStaffs');
+    if (dropdownStaffs){
+        dropdownStaffs.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const staffId = button.getAttribute('data-value');
+                globalStaffId = staffId
+            });
+        });
+    }
 
+    //delete staff record
+    const submitStaffDelete = document.querySelector('#submitStaffDelete');
+    if (submitStaffDelete){
+        submitStaffDelete.addEventListener('click', function (event) {
+            staffId = globalStaffId
+            const updateUrl = `/delete_staff/${staffId}/`;
+            const csrftoken = getCookie('csrftoken'); // Download csrf token
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // refresh whole page
+                    location.reload()
+                } else {
+                    console.error('There was a mistake during deleting a record');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 
+//=======================Customers page===================================
 
+    //editing Customers record
+    const editCustomerButtons = document.querySelectorAll('#editCustomerButt');
+    const Customerform = document.querySelector('#editCustomerForm');
+    if (editCustomerButtons && Customerform){
+        let globalCustId = 0
+        editCustomerButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const CustomerId = button.getAttribute('data-value');
+                globalCustId = CustomerId
+                const url = `/edit_customer/${CustomerId}/`; // url creating
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Received data from Django:', data);
+                        
+                        // fill the form fields
+                        Customerform.first_name.value = data.form_data.first_name;
+                        Customerform.last_name.value = data.form_data.last_name;
+                        Customerform.phone.value = data.form_data.phone;
+                        Customerform.email.value = data.form_data.email;
+                        Customerform.street.value = data.form_data.street;
+                        Customerform.city.value = data.form_data.city;
+                        Customerform.state.value = data.form_data.state;
+                        Customerform.zip_code.value = data.form_data.zip_code;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Django:', error);
+                    });
+            }); 
+        });
+    }
 
+    //submit customer edit 
+    var submitCustomerEdit = document.querySelector('#submitCustomerEdit');
+    if (submitCustomerEdit){
+        submitCustomerEdit.addEventListener('click', function (event) {
+            event.preventDefault();
+            CustomerId = globalCustId
 
+            const form = document.querySelector('#editCustomerForm');
+            const formData = new FormData(form);
+            const updateUrl = `http://127.0.0.1:8000/edit_customer/${CustomerId}/`;
 
+            fetch(updateUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // success handling - works bad for big table volumes
+                    console.log('Record updated successfully');
+                    //refreshTable('#customersTable', '/get_customers_data/')\      //works bad for table witch sorted rows by values
+                    location.reload()
+                } else {
+                    //errors handling
+                    console.error('Error updating record:', data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating record:', error);
+            });
+        });
+    }
 
+    const dropdownCustomer = document.querySelectorAll('#dropdownCustomer');
+    if (dropdownCustomer){
+        dropdownCustomer.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const CustomerId = button.getAttribute('data-value');
+                globalCustId = CustomerId
+            });
+        });
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //delete Customer record
+    const submitCustomerDelete = document.querySelector('#submitCustomerDelete');
+    if (submitCustomerDelete){
+        submitCustomerDelete.addEventListener('click', function (event) {
+            CustomerId = globalCustId
+            const updateUrl = `/delete_customer/${CustomerId}/`;
+            const csrftoken = getCookie('csrftoken'); // Download csrf token
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // refresh whole page
+                    location.reload()
+                } else {
+                    console.error('There was a mistake during deleting a record');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 
     //big tables rendering
     /*$(document).ready(function() {

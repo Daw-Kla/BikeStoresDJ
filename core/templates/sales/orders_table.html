@@ -15,9 +15,32 @@
                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                 <li class="breadcrumb-item active">Orders</li>
             </ol>
-            <div class="card mb-4">
-               
+            <div style="height: 60px">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addingOrder">Add new order</button>
             </div>
+            <!--modals-->
+                <div class="modal fade" id="addingOrder" tabindex="-1" role="dialog" aria-labelledby="addingOrderLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addingOrderLabel">Adding new order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post">{% csrf_token %}
+                                {{ form }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
@@ -34,6 +57,7 @@
                                 <th scope="col">Order Date</th>
                                 <th scope="col">Store</th>
                                 <th scope="col">Staff</th>
+                                <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,6 +66,17 @@
                             {% for x in item %}
                                 <td>{{ x }}</td>
                             {% endfor %}
+                            <td>
+                                <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownOrder" data-value="{{item.0}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownOrder">
+                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editOrderButt" href="" data-toggle="modal" data-target="#editOrder">Edit record</a></li>
+                                    <li><a type="button" class="dropdown-item" id="deleteButt" href="" data-toggle="modal" data-target="#deleteOrder">Delete record</a></li>
+                                </ul>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                         </tbody>

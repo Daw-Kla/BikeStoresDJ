@@ -96,6 +96,8 @@ class StoreForm(forms.Form):
         zip_code = cleaned_data.get("zip_code")
 
 
+ACTIVE_CHOICES = ((0, 'Inactive'),(1, 'Active'),)
+
 class StaffForm(forms.Form):
 
     first_name = forms.CharField(
@@ -142,10 +144,11 @@ class StaffForm(forms.Form):
             }
         )
     )
-    active = forms.CharField(
+    active = forms.ChoiceField(
+        choices=ACTIVE_CHOICES,
         label='Active:',
         required=True,
-        widget=forms.TextInput(
+        widget=forms.Select(
             attrs={
                 'name': 'active',
                 'class': 'form-control form-control-sm',
@@ -177,9 +180,6 @@ class StaffForm(forms.Form):
             }
         )
     )
-
-
-
     def clean(self):
         cleaned_data = super().clean()
         first_name = cleaned_data.get("first_name")
@@ -189,3 +189,105 @@ class StaffForm(forms.Form):
         active = cleaned_data.get("active")
         store = cleaned_data.get("store")
         manager = cleaned_data.get("manager")
+
+class CustomerForm(forms.Form):
+
+    first_name = forms.CharField(
+        label='First name:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'first_name',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'First name'
+            }
+        )
+    )
+    last_name = forms.CharField(
+        label='Last name:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'last_name',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Last name'
+            }
+        )
+    )
+    phone = forms.CharField(
+        label='Phone:',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'phone',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Phone'
+            }
+        )
+    )
+    email = forms.CharField(
+        label='Email:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'email',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Email'
+            }
+        )
+    )
+    street = forms.CharField(
+        label='Street:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'street',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Street'
+            }
+        )
+    )
+    city = forms.CharField(
+        label='City:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'city',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'City'
+            }
+        )
+    )
+    state = forms.CharField(
+        label='State:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'state',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'State'
+            }
+        )
+    )
+    zip_code = forms.CharField(
+        label='Zip_code:',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'name': 'zip_code',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Zip_code'
+            }
+        )
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        first_name = cleaned_data.get("first_name")
+        last_name = cleaned_data.get("last_name")
+        phone = cleaned_data.get("phone")
+        email = cleaned_data.get("email")
+        street = cleaned_data.get("street")
+        city = cleaned_data.get("city")
+        state = cleaned_data.get("state")
+        zip_code = cleaned_data.get("zip_code")
