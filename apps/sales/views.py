@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template import loader
-
+#note
 
 def customers_table(request):
     object_list = Customers.objects.all()
