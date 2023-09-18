@@ -10,7 +10,6 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template import loader
 
-#views take one argument 'request' 
 
 def customers_table(request):
     object_list = Customers.objects.all()
