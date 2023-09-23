@@ -1,6 +1,4 @@
 from django.db import models
-#from apps.production.models import Products
-# Create your models here.
 
 class Customers(models.Model):
     customer_id = models.AutoField(primary_key=True)
@@ -18,7 +16,7 @@ class Customers(models.Model):
         db_table = 'customers'
 
     def __str__(self):
-        return f"(ID: {self.customer_id}) {self.first_name} {self.last_name} "
+        return f"{self.first_name} {self.last_name} "
 
 class Stores(models.Model):
     store_id = models.AutoField(primary_key=True)
@@ -83,6 +81,6 @@ class Staffs(models.Model):
         managed = False
         db_table = 'staffs'
 
-    #this method allows us to display exatly what we want in admin panel
+    #this method allows us to display exactly what we want in admin panel
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

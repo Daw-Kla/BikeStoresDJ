@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django.forms import ModelForm
 from django import forms
-from .models import Stores, Staffs
+from .models import Stores, Staffs, Customers
 
 
 class StoreForm(forms.Form):
@@ -291,3 +291,91 @@ class CustomerForm(forms.Form):
         city = cleaned_data.get("city")
         state = cleaned_data.get("state")
         zip_code = cleaned_data.get("zip_code")
+
+
+STATUS_CHOICES = ((1, 'New'), (2, 'In progress'), (3, 'In delivery'), (4, 'Delivered'),)
+
+class OrderForm(forms.Form):
+
+    customer = forms.ModelChoiceField(
+        queryset=Customers.objects.all(),
+        label='Customer:',
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'name': 'customer',
+                'placeholder': '-----',
+                'class': 'form-control form-control-sm',
+            }
+        )
+    )
+    order_status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        label='Order status:',
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'name': 'order_status',
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Order status'
+            }
+        )
+    )
+    order_date = forms.DateField(
+        label='Order date:',
+        required=True,
+        widget=forms.DateInput(
+            attrs={
+                'class' : 'form-control form-control-sm', 
+                'type':'date',
+                'placeholder': 'Order date'
+            }
+        )
+    )
+    required_date = forms.DateField(
+        label='Required date:',
+        required=True,
+        widget=forms.DateInput(
+            attrs={
+                'class' : 'form-control form-control-sm', 
+                'type':'date',
+                'placeholder': 'Required date'
+            }
+        )
+    )
+    shipped_date = forms.DateField(
+        label='Shipped date:',
+        required=False,
+        widget=forms.DateInput(
+            attrs={
+                'class' : 'form-control form-control-sm', 
+                'type':'date',
+                'placeholder': 'Shipped date',
+                
+            }
+        )
+    )
+    store = forms.ModelChoiceField(
+            queryset=Stores.objects.all(),
+            label='Store:',
+            required=True,
+            widget=forms.Select(
+                attrs={
+                    'name': 'store',
+                    'placeholder': '-----',
+                    'class': 'form-control form-control-sm',
+                }
+            )
+        )
+    staff = forms.ModelChoiceField(
+            queryset=Staffs.objects.all(),
+            label='Staff:',
+            required=True,
+            widget=forms.Select(
+                attrs={
+                    'name': 'staff',
+                    'placeholder': '-----',
+                    'class': 'form-control form-control-sm',
+                }
+            )
+        )

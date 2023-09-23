@@ -3,14 +3,13 @@ from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRed
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from .models import *
-from .forms import StoreForm, StaffForm, CustomerForm
+from .forms import StoreForm, StaffForm, CustomerForm, OrderForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template import loader
 
-#noe
 def customers_table(request):
     object_list = Customers.objects.all()
     data = []
@@ -199,10 +198,6 @@ def stores_table(request):
     
     return render(request, 'sales\stores_table.html', context)
 
-'''def stores(request):
-    result_list = list(Stores.objects.all().values('store_id', 'store_name', 'phone', 'email', 'street', 'city', 'state', 'zip_code'))
-    return JsonResponse(result_list, safe=False)'''
-
 
 def order_items_table(request):
     object_list = OrderItems.objects.all()
@@ -218,23 +213,94 @@ def order_items_table(request):
 '''def order_items(request):
     result_list = list(OrderItems.objects.all().values('order', 'item_id', 'product__product_name', 'quantity', 'list_price', 'discount'))
     return JsonResponse(result_list, safe=False)'''
-
+ 
 def orders_table(request):
     object_list = Orders.objects.all()
-    dane = []
+    data = []
     context = {}
     for item in object_list:
         storeName = item.store.store_name if item.store else None
         y = item.staff.first_name if item.staff else None
         z = item.staff.last_name if item.staff else None
         staff = f'{y} {z}'
-        dane.append([item.order_id, item.customer, item.order_status, item.order_date, storeName, staff])
-    context['tabela'] = dane
+        data.append([item.order_id, item.customer, item.order_status, item.order_date, item.required_date, item.shipped_date, storeName, staff])
+
+    if request.method =='POST': 
+        details = OrderForm(request.POST)
+        if details.is_valid(): 
+            cd = details.cleaned_data
+            store_instance = Stores.objects.get(store_name=cd['store'])
+            staff_instance = Staffs.objects.get(pk=cd['staff'].pk)
+            pc = Orders(customer=cd['customer'],
+                        order_status=cd['order_status'],
+                        order_date=cd['order_date'],
+                        shipped_date=cd['shipped_date'],
+                        required_date=cd['required_date'],
+                        store=store_instance,
+                        staff=staff_instance)
+            pc.save() 
+            pc = OrderForm()
+            return redirect('/orders_table/')
+        else:
+            return redirect('/orders_table/')
+    else:
+        pc = OrderForm()
+
+    context['table'] = data
+    context['form'] = pc
+
     return render(request, 'sales\orders_table.html', context)
 
-'''def orders(request):
-    result_list = list(Orders.objects.all().values('order_id', 'customer', 'order_status', 'order_date', 'store__store_name', 'staff__first_name', 'staff__last_name'))
-    return JsonResponse(result_list, safe=False)'''
+def edit_order(request, order_id):
+    order = Orders.objects.get(pk=order_id)
+    
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            order.customer = cd['customer']
+            order.order_status = cd['order_status']
+            order.order_date = cd['order_date']
+            order.shipped_date = cd['shipped_date']
+            order.required_date = cd['required_date']
+            order.store = cd['store']
+            order.staff = cd['staff']
+            order.save()  # Zapisujemy zmienione dane do bazy danych
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = OrderForm(initial={
+            'customer': order.customer if order.customer else None,
+            'order_status': order.order_status,
+            'order_date': order.order_date,
+            'shipped_date': order.shipped_date,
+            'required_date': order.required_date,
+            'store': order.store_id if order.store else None,
+            'staff': order.staff_id if order.staff else None,
+        })
+
+    data = {
+        'order_id': order_id,
+        'form_data': {
+            'customer': f'{order.customer.first_name} {order.customer.last_name}' if order.customer else None,
+            'order_status': order.order_status,
+            'order_date': order.order_date,
+            'shipped_date': order.shipped_date,
+            'required_date': order.required_date,
+            'store': order.store.store_name if order.store else None,
+            'staff': f'{order.staff.first_name} {order.staff.last_name}' if order.staff else None,
+        }
+    }
+    return JsonResponse(data, encoder=DjangoJSONEncoder)
+
+def delete_order(request, order_id):
+    if request.method == 'POST':
+        order = Orders.objects.get(pk=order_id)
+        order.delete()
+        return redirect('/orders_table/')
+    
+    return redirect('/orders_table/')
 
 def staffs_table(request):
     object_list = Staffs.objects.all()
@@ -329,7 +395,6 @@ def edit_staff(request, staff_id):
             'manager': f'{staff.manager.first_name} {staff.manager.last_name}' if staff.manager else None,
         }
     }
-    print(data)
     return JsonResponse(data, encoder=DjangoJSONEncoder)
 
 def get_staffs_data(request):
@@ -352,9 +417,5 @@ def delete_staff(request, staff_id):
         store.delete()
         return redirect('/staffs_table/')
     
-    return redirect('/stores_table/')
-
-'''def staffs(request):
-    result_list = list(Staffs.objects.all().values('staff_id', 'first_name', 'last_name', 'email', 'phone', 'active', 'store__store_name', 'manager__first_name', 'manager__last_name'))
-    return JsonResponse(result_list, safe=False)'''
+    return redirect('/staffs_table/')
 
