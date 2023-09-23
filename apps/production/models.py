@@ -1,12 +1,7 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from django.db import models
 from django.contrib.auth.models import User
-#from apps.sales.models import Stores
-# Create your models here.
 
 class Brands(models.Model):
     brand_id = models.AutoField(primary_key=True)

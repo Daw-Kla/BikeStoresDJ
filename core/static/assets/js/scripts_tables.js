@@ -366,6 +366,111 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     }
 
+//=======================Orders page===================================
+
+    //editing order record
+    const editOrderButt = document.querySelectorAll('#editOrderButt');
+    const Orderform = document.querySelector('#editOrderForm');
+    if (editOrderButt && Orderform){
+        editOrderButt.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const OrderId = button.getAttribute('data-value');
+                globalOrdId = OrderId
+                const url = `/edit_order/${OrderId}/`; // url creating
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Received data from Django:', data);
+                        
+                        // fill the form fields -doesnt work for customer, store and staff fields - FK
+                        Orderform.customer.value = data.form_data.customer;
+                        Orderform.order_status.value = data.form_data.order_status;
+                        Orderform.order_date.value = data.form_data.order_date;
+                        Orderform.shipped_date.value = data.form_data.shipped_date;
+                        Orderform.required_date.value = data.form_data.required_date;
+                        Orderform.store.value = data.form_data.store;
+                        Orderform.staff.value = data.form_data.staff;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Django:', error);
+                    });
+            }); 
+        });
+    }
+
+    //submit order edit 
+    var submitOrderEdit = document.querySelector('#submitOrderEdit');
+    if (submitOrderEdit){
+        submitOrderEdit.addEventListener('click', function (event) {
+            event.preventDefault();
+            OrderId = globalOrdId
+
+            const form = document.querySelector('#editOrderForm');
+            const formData = new FormData(form);
+            const updateUrl = `http://127.0.0.1:8000/edit_order/${OrderId}/`;
+
+            fetch(updateUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Record updated successfully');
+                    location.reload()
+                } else {
+                    console.error('Error updating record:', data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating record:', error);
+            });
+        });
+    }
+
+    const dropdownOrder = document.querySelectorAll('#dropdownOrder');
+    if (dropdownOrder){
+        dropdownOrder.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const OrderId = button.getAttribute('data-value');
+                globalOrdId = OrderId
+            });
+        });
+    }
+
+    //delete order record
+    const submitOrderDelete = document.querySelector('#submitOrderDelete');
+    if (submitOrderDelete){
+        submitOrderDelete.addEventListener('click', function (event) {
+            OrderId = globalOrdId
+            const updateUrl = `/delete_order/${OrderId}/`;
+            const csrftoken = getCookie('csrftoken'); // Download csrf token
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // refresh whole page
+                    location.reload()
+                } else {
+                    console.error('There was a mistake during deleting a record');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+
+
+
+
     //big tables rendering
     /*$(document).ready(function() {
         let dataTable = $('#ordersTable').DataTable({
