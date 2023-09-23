@@ -5,7 +5,16 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRedirect
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
+from .models import *
+from .forms import StoreForm, StaffForm, CustomerForm
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.template import loader
 from django.urls import reverse
 
@@ -42,3 +51,15 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+def stocks_table(request):
+    object_list = Stocks.objects.all()
+    data = []
+    context = {}
+
+    for item in object_list:
+        data.append([item.customer_id, item.first_name, item.last_name, item.phone, item.email, item.street, item.city, item.state, item.zip_code])
+    context['table'] = data
+
+    return render(request, 'production\stocks_table.html', context)

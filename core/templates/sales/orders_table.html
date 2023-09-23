@@ -33,11 +33,54 @@
                                 {{ form }}
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-light col-5 mx-auto"><a href="{% url 'customers_table' %}">Add new customer</a></button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Add</button>
                         </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="editOrder" tabindex="-1" role="dialog" aria-labelledby="editOrderLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editOrderLabel">Editing customer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editOrderForm">{% csrf_token %}
+                            {{ form }}
+                        </div>
+                            </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="submitOrderEdit" data-dismiss="modal">Submit</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="deleteOrderLabel">Deleting record</h5>
+                          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="deleteOrderForm">{% csrf_token %}
+                                Do you really want to delete this record?
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary" id="submitOrderDelete" data-dismiss="modal">Delete</button>
+                        </div>
+                      </div>
                     </div>
                 </div>
 
@@ -51,17 +94,19 @@
                     <table id="ordersTable" class="display">
                         <thead>
                             <tr>
-                                <th scope="col">Order id</th>
+                                <th scope="col">id {{table.order_id}}</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Order Status</th>
                                 <th scope="col">Order Date</th>
+                                <th scope="col">Required Date</th>
+                                <th scope="col">Shipped Date</th>
                                 <th scope="col">Store</th>
                                 <th scope="col">Staff</th>
                                 <th scope="col">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in tabela %}
+                            {% for item in table %}
                         <tr>
                             {% for x in item %}
                                 <td>{{ x }}</td>
@@ -72,7 +117,7 @@
                                     <i class="fas fa-cogs"></i>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownOrder">
-                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editOrderButt" href="" data-toggle="modal" data-target="#editOrder">Edit record</a></li>
+                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editOrderButt" href="{% url 'edit_order' item.0 %}" data-toggle="modal" data-target="#editOrder">Edit record</a></li>
                                     <li><a type="button" class="dropdown-item" id="deleteButt" href="" data-toggle="modal" data-target="#deleteOrder">Delete record</a></li>
                                 </ul>
                                 </div>

@@ -1,0 +1,74 @@
+
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+        
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Stocks</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Stocks</li>
+            </ol>
+            
+            <div class="card mb-4">
+            <div id="Stocks table">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Stocks data table
+                </div>
+                <div class="card-body">
+
+                    <table id="stocksTable" class="display">
+                        <thead>
+                            <tr>
+                                <th scope="col">id {{table.store_id}}</th>
+                                <th scope="col">Store_name</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Street</th>
+                                <th scope="col">City</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Zip Code</th>
+                                <th scope="col">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in table %}
+                        <tr>
+                            {% for x in item %}
+                                <td>{{ x }}</td>
+                                {% endfor %}
+                            <td>
+                                <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toogle" href="#" role="button" id="dropdownStock" data-value="{{item.0}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownStock">
+                                    <li><a class="dropdown-item" data-value="{{item.0}}" id="editStockButt" href="{% url 'edit_stock' item.0 %}" data-toggle="modal" data-target="#editStock">Edit record</a></li>
+                                    <li><a type="button" class="dropdown-item" id="deleteButt" href="" data-toggle="modal" data-target="#deleteStock">Delete record</a></li>
+                                </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes there in base.html file  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
