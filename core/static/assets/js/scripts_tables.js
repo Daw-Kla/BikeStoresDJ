@@ -173,6 +173,8 @@ window.addEventListener('DOMContentLoaded', event => {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Received data from Django:', data);
+                        console.log(data.form_data.manager)
+                        console.log(typeof(data.form_data.manager))
                         
                         // fill the form fields
                         Stafform.first_name.value = data.form_data.first_name;
@@ -180,8 +182,22 @@ window.addEventListener('DOMContentLoaded', event => {
                         Stafform.email.value = data.form_data.email;
                         Stafform.phone.value = data.form_data.phone;
                         Stafform.active.value = data.form_data.active;
-                        Stafform.store.value = data.form_data.store;
-                        Stafform.manager.value = data.form_data.manager;
+
+                        // Convert store name to store object
+                        const storeSelect = Stafform.querySelector('#id_store');
+                        const storeName = data.form_data.store;
+                        const storeOption = [...storeSelect.options].find(option => option.textContent === storeName);
+                        if (storeOption) {
+                            storeSelect.value = storeOption.value;
+                        }
+                        
+                        // Convert manager name to manager object (assuming the manager field has an ID)
+                        const managerSelect = Stafform.querySelector('#id_manager');
+                        const managerName = data.form_data.manager;
+                        const managerOption = [...managerSelect.options].find(option => option.textContent === managerName);
+                        if (managerOption) {
+                            managerSelect.value = managerOption.value;
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching data from Django:', error);
@@ -383,14 +399,30 @@ window.addEventListener('DOMContentLoaded', event => {
                     .then(data => {
                         console.log('Received data from Django:', data);
                         
-                        // fill the form fields -doesnt work for customer, store and staff fields - FK
-                        Orderform.customer.value = data.form_data.customer;
                         Orderform.order_status.value = data.form_data.order_status;
                         Orderform.order_date.value = data.form_data.order_date;
                         Orderform.shipped_date.value = data.form_data.shipped_date;
                         Orderform.required_date.value = data.form_data.required_date;
-                        Orderform.store.value = data.form_data.store;
-                        Orderform.staff.value = data.form_data.staff;
+                        const customerSelect = Orderform.querySelector('#id_customer');
+                        const customerName = data.form_data.customer;
+                        for (const option of customerSelect.options) {
+                            if (option.text === customerName) {
+                                option.selected = true;
+                                break;
+                            }
+                        }
+                        const storeSelect = Orderform.querySelector('#id_store');
+                        const storeName = data.form_data.store;
+                        const storeOption = [...storeSelect.options].find(option => option.textContent === storeName);
+                        if (storeOption) {
+                            storeSelect.value = storeOption.value;
+                        }
+                        const staffSelect = Orderform.querySelector('#id_staff');
+                        const staffName = data.form_data.staff;
+                        const staffOption = [...staffSelect.options].find(option => option.textContent === staffName);
+                        if (staffOption) {
+                            staffSelect.value = staffOption.value;
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching data from Django:', error);
