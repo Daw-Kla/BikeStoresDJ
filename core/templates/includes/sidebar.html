@@ -57,11 +57,11 @@
                 Charts
             </a>
             <div class="sb-sidenav-menu-heading">Production</div>
-            <a class="nav-link {% if 'products' in segment %} active {% endif %}" href="#">
+            <a class="nav-link {% if 'products' in segment %} active {% endif %}" href="{% url 'products_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Products
             </a>
-            <a class="nav-link {% if 'stocks' in segment %} active {% endif %}" href="#">
+            <a class="nav-link {% if 'stocks' in segment %} active {% endif %}" href="{% url 'stocks_table' %}">
                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                 Stocks
             </a>
