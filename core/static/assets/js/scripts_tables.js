@@ -173,15 +173,31 @@ window.addEventListener('DOMContentLoaded', event => {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Received data from Django:', data);
-                        
+                        console.log(data.form_data.manager)
+                        console.log(typeof(data.form_data.manager))
+
                         // fill the form fields
                         Stafform.first_name.value = data.form_data.first_name;
                         Stafform.last_name.value = data.form_data.last_name;
                         Stafform.email.value = data.form_data.email;
                         Stafform.phone.value = data.form_data.phone;
                         Stafform.active.value = data.form_data.active;
-                        Stafform.store.value = data.form_data.store;
-                        Stafform.manager.value = data.form_data.manager;
+
+                        // Convert store name to store object
+                        const storeSelect = Stafform.querySelector('#id_store');
+                        const storeName = data.form_data.store;
+                        const storeOption = [...storeSelect.options].find(option => option.textContent === storeName);
+                        if (storeOption) {
+                            storeSelect.value = storeOption.value;
+                        }
+                        
+                        // Convert manager name to manager object (assuming the manager field has an ID)
+                        const managerSelect = Stafform.querySelector('#id_manager');
+                        const managerName = data.form_data.manager;
+                        const managerOption = [...managerSelect.options].find(option => option.textContent === managerName);
+                        if (managerOption) {
+                            managerSelect.value = managerOption.value;
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching data from Django:', error);
@@ -383,14 +399,30 @@ window.addEventListener('DOMContentLoaded', event => {
                     .then(data => {
                         console.log('Received data from Django:', data);
                         
-                        // fill the form fields -doesnt work for customer, store and staff fields - FK
-                        Orderform.customer.value = data.form_data.customer;
                         Orderform.order_status.value = data.form_data.order_status;
                         Orderform.order_date.value = data.form_data.order_date;
                         Orderform.shipped_date.value = data.form_data.shipped_date;
                         Orderform.required_date.value = data.form_data.required_date;
-                        Orderform.store.value = data.form_data.store;
-                        Orderform.staff.value = data.form_data.staff;
+                        const customerSelect = Orderform.querySelector('#id_customer');
+                        const customerName = data.form_data.customer;
+                        for (const option of customerSelect.options) {
+                            if (option.text === customerName) {
+                                option.selected = true;
+                                break;
+                            }
+                        }
+                        const storeSelect = Orderform.querySelector('#id_store');
+                        const storeName = data.form_data.store;
+                        const storeOption = [...storeSelect.options].find(option => option.textContent === storeName);
+                        if (storeOption) {
+                            storeSelect.value = storeOption.value;
+                        }
+                        const staffSelect = Orderform.querySelector('#id_staff');
+                        const staffName = data.form_data.staff;
+                        const staffOption = [...staffSelect.options].find(option => option.textContent === staffName);
+                        if (staffOption) {
+                            staffSelect.value = staffOption.value;
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching data from Django:', error);
@@ -467,10 +499,228 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     }
 
+//=======================Stocks page===================================
+
+    //editing stock record
+    const editStockButt = document.querySelectorAll('#editStockButt');
+    const Stockform = document.querySelector('#editStockForm');
+    if (editStockButt && Stockform){
+        editStockButt.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const StockId = button.getAttribute('data-value');
+                globalStockId = StockId
+                const url = `/edit_stock/${StockId}/`; // url creating
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Received data from Django:', data);
+                        
+                        const storeSelect = Stockform.querySelector('#id_store');
+                        const storeName = data.form_data.store;
+                        const storeOption = [...storeSelect.options].find(option => option.textContent === storeName);
+                        if (storeOption) {
+                            storeSelect.value = storeOption.value;
+                        }
+
+                        const productSelect = Stockform.querySelector('#id_product');
+                        const productName = data.form_data.product;
+                        for (const option of productSelect.options) {
+                            if (option.text === productName) {
+                                option.selected = true;
+                                break;
+                            }
+                        }
+
+                        Stockform.quantity.value = data.form_data.quantity;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Django:', error);
+                    });
+            }); 
+        });
+    }
+
+    //submit stock edit 
+    var submitStockEdit = document.querySelector('#submitStockEdit');
+    if (submitStockEdit){
+        submitStockEdit.addEventListener('click', function (event) {
+            event.preventDefault();
+            StockId = globalStockId
+
+            const form = document.querySelector('#editStockForm');
+            const formData = new FormData(form);
+            const updateUrl = `http://127.0.0.1:8000/edit_stock/${StockId}/`;
+
+            fetch(updateUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Record updated successfully');
+                    location.reload()
+                } else {
+                    console.error('Error updating record:', data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating record:', error);
+            });
+        });
+    }
+
+    const dropdownStock = document.querySelectorAll('#dropdownStock');
+        if (dropdownStock){
+            dropdownStock.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const StockId = button.getAttribute('data-value');
+                    globalStockId = StockId
+                });
+            });
+        }
+
+    //delete stock record
+    const submitStockDelete = document.querySelector('#submitStockDelete');
+    if (submitStockDelete){
+        submitStockDelete.addEventListener('click', function (event) {
+            StockId = globalStockId
+            const updateUrl = `/delete_stock/${StockId}/`;
+            const csrftoken = getCookie('csrftoken');
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload()
+                } else {
+                    console.error('There was a mistake during deleting a record');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 
 
+//=======================Products page===================================
+
+    //editing product record
+    const editProductButt = document.querySelectorAll('#editProductButt');
+    const Productform = document.querySelector('#editProductForm');
+    if (editProductButt && Productform){
+        editProductButt.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const ProductId = button.getAttribute('data-value');
+                globalProdId = ProductId
+                const url = `/edit_product/${ProductId}/`; // url creating
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Received data from Django:', data);
+                        
+                        Productform.product_name.value = data.form_data.product_name;
+
+                        const brandSelect = Productform.querySelector('#id_brand');
+                        const brandName = data.form_data.brand;
+                        const brandOption = [...brandSelect.options].find(option => option.textContent === brandName);
+                        if (brandOption) {
+                            brandSelect.value = brandOption.value;
+                        }
+
+                        const categorySelect = Productform.querySelector('#id_category');
+                        const categoryName = data.form_data.category;
+                        const categoryOption = [...categorySelect.options].find(option => option.textContent === categoryName);
+                        if (categoryOption) {
+                            categorySelect.value = categoryOption.value;
+                        }
+
+                        Productform.model_year.value = data.form_data.model_year;
+                        Productform.list_price.value = data.form_data.list_price;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data from Django:', error);
+                    });
+            }); 
+        });
+    }
+
+    //submit product edit 
+    var submitProductEdit = document.querySelector('#submitProductEdit');
+    if (submitProductEdit){
+        submitProductEdit.addEventListener('click', function (event) {
+            event.preventDefault();
+            ProductId = globalProdId
+
+            const form = document.querySelector('#editProductForm');
+            const formData = new FormData(form);
+            const updateUrl = `http://127.0.0.1:8000/edit_product/${ProductId}/`;
+
+            fetch(updateUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Record updated successfully');
+                    location.reload()
+                } else {
+                    console.error('Error updating record:', data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating record:', error);
+            });
+        });
+    }
+
+    const dropdownProduct = document.querySelectorAll('#dropdownProduct');
+    if (dropdownProduct){
+        dropdownProduct.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const ProductId = button.getAttribute('data-value');
+                globalProdId = ProductId
+            });
+        });
+    }
+
+    //delete product record
+    const submitProductDelete = document.querySelector('#submitProductDelete');
+    if (submitProductDelete){
+        submitProductDelete.addEventListener('click', function (event) {
+            ProductId = globalProdId
+            const updateUrl = `/delete_product/${ProductId}/`;
+            const csrftoken = getCookie('csrftoken');
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload()
+                } else {
+                    console.error('There was a mistake during deleting a record');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 
 
+    
     //big tables rendering
     /*$(document).ready(function() {
         let dataTable = $('#ordersTable').DataTable({

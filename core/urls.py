@@ -14,6 +14,7 @@ urlpatterns = [
 
     # Leave `Home.Urls` as last the last line
     path("", include('apps.sales.urls')),  # added urls addresses from app sales
+    path("", include('apps.production.urls')),  # added urls addresses from app sales
     path("", include("apps.home.urls"))
     
 ]
