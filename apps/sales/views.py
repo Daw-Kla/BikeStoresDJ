@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
 from django.template import loader
 
 def customers_table(request):
@@ -353,7 +354,6 @@ def staffs_table(request):
     context['form'] = pc
     return render(request, 'sales\staffs_table.html', context)
 
-
 def edit_staff(request, staff_id):
     staff = Staffs.objects.get(pk=staff_id)
 
@@ -373,7 +373,7 @@ def edit_staff(request, staff_id):
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
-        form = StoreForm(initial={
+        form = StaffForm(initial={
             'first_name': staff.first_name,
             'last_name': staff.last_name,
             'email': staff.email,
@@ -383,19 +383,23 @@ def edit_staff(request, staff_id):
             'manager': staff.manager_id if staff.manager else None,
         })
 
-    data = {
-        'staff_id': staff_id,
-        'form_data': {
-            'first_name': staff.first_name,
-            'last_name': staff.last_name,
-            'email': staff.email,
-            'phone': staff.phone,
-            'active': staff.active,
-            'store': staff.store.store_name if staff.store else None,
-            'manager': f'{staff.manager.first_name} {staff.manager.last_name}' if staff.manager else None,
+        data = {
+            'staff_id': staff_id,
+            'form_data': {
+                'first_name': staff.first_name,
+                'last_name': staff.last_name,
+                'email': staff.email,
+                'phone': staff.phone,
+                'active': staff.active,
+                'store': staff.store,
+                'manager': f'{staff.manager.first_name} {staff.manager.last_name}' if staff.manager else None,
+            }
         }
-    }
-    return JsonResponse(data, encoder=DjangoJSONEncoder)
+
+        # Serializuj obiekt Stores do formatu JSON
+        data['form_data']['store'] = staff.store.store_name if staff.store else None
+
+        return JsonResponse(data, encoder=DjangoJSONEncoder)
 
 def get_staffs_data(request):
     staffs = Staffs.objects.all()
