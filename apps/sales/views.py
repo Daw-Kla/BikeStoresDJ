@@ -3,13 +3,18 @@ from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRed
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from .models import *
-from .forms import StoreForm, StaffForm, CustomerForm, OrderForm
+from .forms import StoreForm, StaffForm, CustomerForm, OrderForm, YearSelectForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 import json
+import calendar
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 from django.template import loader
+
+from datetime import date
+from apps.production.models import Brands, Categories
+from django.db.models import Count
 
 def customers_table(request):
     object_list = Customers.objects.all()
@@ -423,3 +428,47 @@ def delete_staff(request, staff_id):
     
     return redirect('/staffs_table/')
 
+def charts_test(request):
+    
+    object_list = Orders.objects.all()
+    data = []
+    item_per_year ={}
+    selected_year = None
+    labels = []
+    values = []
+    
+    if request.method == 'GET':
+        selected_year = request.GET.get('years')
+
+    years = set(item.order_date.year for item in object_list)  
+    form = YearSelectForm(request.GET or None, initial={'years': selected_year})
+    form.fields['years'].choices = [(year, year) for year in years]
+
+    for item in object_list:
+        data.append([item.order_id, item.customer, item.order_status, item.order_date, item.required_date, item.shipped_date, item.store, item.staff])
+
+        if item.order_date.year not in item_per_year:
+            item_per_year[item.order_date.year] = {}
+
+        if item.order_date.month not in item_per_year[item.order_date.year]:
+            item_per_year[item.order_date.year][item.order_date.month] = 1
+        else:
+            item_per_year[item.order_date.year][item.order_date.month] += 1
+
+    for key, val in item_per_year[int(selected_year)].items():
+        labels.append(calendar.month_name[key])
+        values.append(val)
+
+    brand_sales = Brands.objects.annotate(total_sales=Count('products__orderitems', filter=models.Q(products__orderitems__order__order_date__year=selected_year))).values('brand_name', 'total_sales')
+    category_sales = Categories.objects.annotate(total_sales=Count('products__orderitems', filter=models.Q(products__orderitems__order__order_date__year=selected_year))).values('category_name', 'total_sales')
+
+    brands = [entry['brand_name'] for entry in brand_sales]
+    total_brands_sales = [entry['total_sales'] for entry in brand_sales]
+    categories = [entry['category_name'] for entry in category_sales]
+    total_categories_sales = [entry['total_sales'] for entry in category_sales]
+
+    labeled_data = {'labels':labels, 'values':values, 'brands': brands, 'total_brands_sales': total_brands_sales, 
+                    'categories': categories, 'total_categories_sales': total_categories_sales}
+    json_data = json.dumps(labeled_data)
+
+    return render(request, 'home/charts_test.html', {'form': form, 'json_data': json_data})

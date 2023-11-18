@@ -31,4 +31,6 @@ urlpatterns = [
     path('edit_staff/<int:staff_id>/', views.edit_staff, name='edit_staff'),
     path('delete_staff/<int:staff_id>/', views.delete_staff, name='delete_staff'),
     path('get_staffs_data/', views.get_staffs_data, name='get_staffs_data'),
+
+    path('charts_test/', views.charts_test, name='charts_test'),
 ]

@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django.forms import ModelForm
 from django import forms
-from .models import Stores, Staffs, Customers
+from .models import Stores, Staffs, Customers, Orders
 
 
 class StoreForm(forms.Form):
@@ -379,3 +379,16 @@ class OrderForm(forms.Form):
                 }
             )
         )
+
+class YearSelectForm(forms.Form):
+    years = forms.ChoiceField(
+        required=True,
+        widget=forms.Select(
+            attrs={
+                'name': 'year',
+                'placeholder': '-----',
+                'class': 'form-control form-control-sm',
+                'style': 'width: 50px; height: 40px; margin-left: 10px; margin-right: 10px'
+            }
+        )
+    )
